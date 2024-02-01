@@ -8,7 +8,7 @@ def register_jwt_handlers(jwt):
         return jsonify({
             'error': 'Invalid token provided',
             'details': str(error)
-        }), 422
+        }), 401
 
     @jwt.expired_token_loader
     def expired_token_callback(header, payload):
