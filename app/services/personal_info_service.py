@@ -1,15 +1,14 @@
-from flask import Response
+from sqlalchemy.exc import MultipleResultsFound, SQLAlchemyError, NoResultFound
 
 from app.repositories.personal_info_repository import get_person_from_db
 
 
-def fetch_personal_info(username: str) -> Response or None:
-    person = get_person_from_db(username)
-
-    if person is None:
-        return None
-
-    return person_to_dict(person)
+def fetch_personal_info(username: str) -> dict[str, str]:
+    try:
+        person = get_person_from_db(username)
+        return person_to_dict(person)
+    except (NoResultFound, MultipleResultsFound, SQLAlchemyError) as exception:
+        raise exception
 
 
 def person_to_dict(person):
