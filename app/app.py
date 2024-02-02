@@ -8,7 +8,7 @@ from app.extensions import database, jwt
 from app.routes.personal_info_routes import personal_info_bp
 
 
-def create_app(test_config=None):
+def create_app(test_config: dict = None) -> Flask:
     application_form_api = Flask(__name__)
     application_form_api.config.from_pyfile('config.py')
 
@@ -20,7 +20,7 @@ def create_app(test_config=None):
     return application_form_api
 
 
-def setup_logging(application_form_api):
+def setup_logging(application_form_api: Flask) -> None:
     log_dir = application_form_api.config.get('LOG_DIR')
     if not os.path.exists(log_dir):
         os.makedirs(log_dir)
@@ -32,13 +32,13 @@ def setup_logging(application_form_api):
     )
 
 
-def setup_extensions(application_form_api):
+def setup_extensions(application_form_api: Flask) -> None:
     database.init_app(application_form_api)
     jwt.init_app(application_form_api)
     jwt_handlers.register_jwt_handlers(jwt)
 
 
-def register_blueprints(application_form_api):
+def register_blueprints(application_form_api: Flask) -> None:
     application_form_api.register_blueprint(personal_info_bp,
                                             url_prefix='/recruitment/personal_info')
 
