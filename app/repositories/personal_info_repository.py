@@ -8,15 +8,15 @@ def get_person_from_db(username: str) -> Person:
     try:
         return Person.query.filter_by(username=username).one()
     except NoResultFound:
-        log_and_raise(NoResultFound, f'No user found with username {username}.')
+        __log_and_raise(NoResultFound, f'No user found with username {username}.')
     except MultipleResultsFound:
-        log_and_raise(MultipleResultsFound,
+        __log_and_raise(MultipleResultsFound,
                       f'Multiple users found with username {username}.')
     except SQLAlchemyError:
-        log_and_raise(SQLAlchemyError, 'Error retrieving user from the database.')
+        __log_and_raise(SQLAlchemyError, 'Error retrieving user from the database.')
 
 
-def log_and_raise(exception_type, message):
+def __log_and_raise(exception_type: type, message: str) -> None:
     exception = exception_type(message)
     current_app.logger.error(exception)
     raise exception
