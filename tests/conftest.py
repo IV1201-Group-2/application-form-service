@@ -15,9 +15,7 @@ def app_with_client():
 
     with flask_app.app_context():
         database.create_all()
-        database.session.add(Person(username='test_user', surname='tester'))
-        database.session.add(Person(username='duplicate_user', surname='duplicate1'))
-        database.session.add(Person(username='duplicate_user', surname='duplicate2'))
+        database.session.add(Person(name='test', surname='tester', role_id=2))
         database.session.commit()
 
     with flask_app.test_client() as testing_client:
