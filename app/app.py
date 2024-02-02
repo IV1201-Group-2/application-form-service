@@ -9,6 +9,13 @@ from app.routes.personal_info_routes import personal_info_bp
 
 
 def create_app(test_config: dict = None) -> Flask:
+    """
+    Creates and configures the Flask application.
+
+    :param test_config: The configuration for the Flask application.
+    :return: The configured Flask application.
+    """
+
     application_form_api = Flask(__name__)
     application_form_api.config.from_pyfile('config.py')
 
@@ -21,6 +28,12 @@ def create_app(test_config: dict = None) -> Flask:
 
 
 def setup_logging(application_form_api: Flask) -> None:
+    """
+    Sets up logging for the Flask application.
+
+    :param application_form_api: The Flask application.
+    """
+
     log_dir = application_form_api.config.get('LOG_DIR')
     if not os.path.exists(log_dir):
         os.makedirs(log_dir)
@@ -33,12 +46,24 @@ def setup_logging(application_form_api: Flask) -> None:
 
 
 def setup_extensions(application_form_api: Flask) -> None:
+    """
+    Sets up extensions for the Flask application.
+
+    :param application_form_api: The Flask application.
+    """
+
     database.init_app(application_form_api)
     jwt.init_app(application_form_api)
     jwt_handlers.register_jwt_handlers(jwt)
 
 
 def register_blueprints(application_form_api: Flask) -> None:
+    """
+    Registers blueprints for the Flask application.
+
+    :param application_form_api: The Flask application.
+    """
+    
     application_form_api.register_blueprint(personal_info_bp,
                                             url_prefix='/recruitment/personal_info')
 
