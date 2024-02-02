@@ -1,6 +1,6 @@
 from flask import Blueprint, jsonify, Response, current_app
 from flask_jwt_extended import jwt_required, get_jwt_identity
-from sqlalchemy.exc import NoResultFound, MultipleResultsFound, SQLAlchemyError
+from sqlalchemy.exc import NoResultFound, SQLAlchemyError
 
 from app.services.personal_info_service import fetch_personal_info
 
@@ -16,7 +16,7 @@ def get_personal_info() -> tuple[Response, int]:
     :return: A tuple containing the response and the status code.
     """
 
-    current_user = get_jwt_identity()
+    current_user = get_jwt_identity().get('id')
 
     try:
         personal_info = fetch_personal_info(current_user)
@@ -24,11 +24,7 @@ def get_personal_info() -> tuple[Response, int]:
         return jsonify(personal_info), 200
     except NoResultFound:
         return jsonify({'error': 'USER_NOT_FOUND',
-                        'details': f'User not found with email: {current_user}'}), 404
-    except MultipleResultsFound:
-        return jsonify({'error': 'MULTIPLE_USERS_FOUND',
-                        'details':
-                            f'Multiple users found with email: {current_user}'}), 409
+                        'details': f'User not found with id: {current_user}'}), 404
     except SQLAlchemyError:
         return jsonify({'error': 'COULD_NOT_FETCH_USER',
                         'details': 'Could not fetch user from database'}), 500
