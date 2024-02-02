@@ -1,19 +1,16 @@
 from flask import current_app
-from sqlalchemy.exc import NoResultFound, MultipleResultsFound, SQLAlchemyError
+from sqlalchemy.exc import NoResultFound, SQLAlchemyError
 
 from app.models.person import Person
 
 
-def get_person_from_db(username: str) -> Person:
+def get_person_from_db(user_id: int) -> Person:
     try:
-        return Person.query.filter_by(username=username).one()
+        return Person.query.filter_by(person_id=user_id).one()
     except NoResultFound:
-        __log_and_raise(NoResultFound, f'No user found with username {username}.')
-    except MultipleResultsFound:
-        __log_and_raise(MultipleResultsFound,
-                      f'Multiple users found with username {username}.')
+        __log_and_raise(NoResultFound, f'USER NOT FOUND: {user_id}.')
     except SQLAlchemyError:
-        __log_and_raise(SQLAlchemyError, 'Error retrieving user from the database.')
+        __log_and_raise(SQLAlchemyError, 'DATABASE CONNECTION ERROR.')
 
 
 def __log_and_raise(exception_type: type, message: str) -> None:
