@@ -31,7 +31,7 @@ def test_get_personal_info_success(app_with_client):
     _, test_client = app_with_client
     valid_token, _ = generate_valid_and_invalid_tokens(app_with_client)
 
-    response = test_client.get('/recruitment/personal_info/get',
+    response = test_client.get('/applicant/personal_info/',
                                headers={'Authorization': f'Bearer {valid_token}'})
     assert response.status_code == 200
     assert response.json['name'] == 'test'
@@ -43,7 +43,7 @@ def test_get_personal_info_no_result(app_with_client):
     _, test_client = app_with_client
     _, invalid_token = generate_valid_and_invalid_tokens(app_with_client)
 
-    response = test_client.get('/recruitment/personal_info/get',
+    response = test_client.get('/applicant/personal_info/',
                                headers={'Authorization': f'Bearer {invalid_token}'})
     assert response.status_code == 404
     assert response.json['error'] == 'USER_NOT_FOUND'
@@ -57,7 +57,7 @@ def test_get_personal_info_sqlalchemy_error(app_with_client):
     with patch('app.routes.personal_info_routes.fetch_personal_info') as mock_fetch:
         mock_fetch.side_effect = SQLAlchemyError("A database error occurred")
 
-        response = test_client.get('/recruitment/personal_info/get',
+        response = test_client.get('/applicant/personal_info/',
                                    headers={'Authorization': f'Bearer {valid_token}'})
 
         assert response.status_code == 500

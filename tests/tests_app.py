@@ -34,7 +34,7 @@ class TestLogging(unittest.TestCase):
         self.assertTrue(os.path.exists(self.app.config.get('LOG_FILE')))
 
     def test_log_file_has_correct_format(self):
-        self.client.get('/recruitment/personal_info')
+        self.client.get('/applicant/personal_info')
         expected_log_format = \
             r'\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2},\d{3} - \w+\.?\w* - \w+ - .*'
         with open(self.app.config.get('LOG_FILE'), 'r') as log_file:
