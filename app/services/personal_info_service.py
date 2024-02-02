@@ -1,21 +1,21 @@
-from sqlalchemy.exc import MultipleResultsFound, SQLAlchemyError, NoResultFound
+from sqlalchemy.exc import SQLAlchemyError, NoResultFound
 
 from app.models.person import Person
 from app.repositories.personal_info_repository import get_person_from_db
 
 
-def fetch_personal_info(username: str) -> dict[str, str]:
+def fetch_personal_info(user_id: int) -> dict[str, str]:
     """
-    Fetches personal information for a given username.
+    Fetches personal information for a given email.
 
-    :param username: The username of the person.
+    :param user_id: The user id of the user.
     :return: A dictionary containing the personal information of the person.
     """
 
     try:
-        person = get_person_from_db(username)
+        person = get_person_from_db(user_id)
         return __person_to_dict(person)
-    except (NoResultFound, MultipleResultsFound, SQLAlchemyError) as exception:
+    except (NoResultFound, SQLAlchemyError) as exception:
         raise exception
 
 
@@ -26,12 +26,13 @@ def __person_to_dict(person: Person) -> dict:
     :param person: The Person object.
     :return: A dictionary representation of the Person object.
     """
-    
+
     return {
-        'person_id': person.person_id,
+        'id': person.person_id,
         'name': person.name,
         'surname': person.surname,
         'pnr': person.pnr,
         'email': person.email,
-        'username': person.username
+        'username': person.username,
+        'role': person.role_id
     }
