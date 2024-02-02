@@ -25,11 +25,3 @@ def register_jwt_handlers(jwt):
             'error': 'Unauthorized',
             'details': str(error)
         }), 401
-
-    @jwt.needs_fresh_token_loader
-    def needs_fresh_token_callback():
-        current_app.logger.warning('Fresh JWT token required')
-        return jsonify({
-            'error': 'Fresh token required',
-            'details': 'This operation requires a fresh token.'
-        }), 401
