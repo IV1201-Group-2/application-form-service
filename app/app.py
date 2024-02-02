@@ -8,11 +8,12 @@ from app.extensions import database, jwt
 from app.routes.personal_info_routes import personal_info_bp
 
 
-def create_app():
+def create_app(test_config=None):
     application_form_api = Flask(__name__)
     application_form_api.config.from_pyfile('config.py')
 
-    setup_logging(application_form_api)
+    if not test_config:
+        setup_logging(application_form_api)
     setup_extensions(application_form_api)
     register_blueprints(application_form_api)
 
