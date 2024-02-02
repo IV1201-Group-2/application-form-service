@@ -18,25 +18,17 @@ def get_personal_info() -> tuple[Response, int]:
 
     current_user = get_jwt_identity()
 
-    def handle_error(exception: Exception, status_code: int) -> tuple[Response, int]:
-        """
-        Handles errors during the execution of the function.
-
-        :param exception: The exception that occurred.
-        :param status_code: The status code to return.
-        :return: A tuple containing the error message and the status code.
-        """
-        
-        error_message = {'error': str(exception)}
-        return jsonify(error_message), status_code
-
     try:
         personal_info = fetch_personal_info(current_user)
         current_app.logger.info(f'Responded with personal info for {current_user}.')
         return jsonify(personal_info), 200
-    except NoResultFound as ex:
-        return handle_error(ex, 404)
-    except MultipleResultsFound as ex:
-        return handle_error(ex, 409)
-    except SQLAlchemyError as ex:
-        return handle_error(ex, 500)
+    except NoResultFound:
+        return jsonify({'error': 'USER_NOT_FOUND',
+                        'details': f'User not found with email: {current_user}'}), 404
+    except MultipleResultsFound:
+        return jsonify({'error': 'MULTIPLE_USERS_FOUND',
+                        'details':
+                            f'Multiple users found with email: {current_user}'}), 409
+    except SQLAlchemyError:
+        return jsonify({'error': 'COULD_NOT_FETCH_USER',
+                        'details': 'Could not fetch user from database'}), 500

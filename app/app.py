@@ -8,7 +8,7 @@ from app.extensions import database, jwt
 from app.routes.personal_info_routes import personal_info_bp
 
 
-def create_app(test_config: dict = None) -> Flask:
+def create_app(test_config: bool = None) -> Flask:
     """
     Creates and configures the Flask application.
 
@@ -63,7 +63,7 @@ def register_blueprints(application_form_api: Flask) -> None:
 
     :param application_form_api: The Flask application.
     """
-    
+
     application_form_api.register_blueprint(personal_info_bp,
                                             url_prefix='/recruitment/personal_info')
 
