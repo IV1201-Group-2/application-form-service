@@ -12,7 +12,7 @@ personal_info_bp = Blueprint('personal_info', __name__)
 def get_personal_info() -> tuple[Response, int]:
     current_user = get_jwt_identity()
 
-    def handle_error(exception, status_code):
+    def handle_error(exception: Exception, status_code: int) -> tuple[Response, int]:
         error_message = {'error': str(exception)}
         return jsonify(error_message), status_code
 
