@@ -7,7 +7,7 @@ from app.services.personal_info_service import fetch_personal_info
 personal_info_bp = Blueprint('personal_info', __name__)
 
 
-@personal_info_bp.route('/get', methods=['GET'])
+@personal_info_bp.route('/', methods=['GET'])
 @jwt_required()
 def get_personal_info() -> tuple[Response, int]:
     """
