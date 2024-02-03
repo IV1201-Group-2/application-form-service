@@ -1,5 +1,5 @@
 from flask import current_app
-from sqlalchemy.exc import SQLAlchemyError, NoResultFound
+from sqlalchemy.exc import NoResultFound, SQLAlchemyError
 
 from app.models.competence import Competence
 
@@ -13,11 +13,12 @@ def get_competences_from_db() -> list[Competence]:
 
     try:
         competences = Competence.query.all()
-        if not competences:
-            exception = NoResultFound('No competences found in the database')
-            current_app.logger.error(exception)
-            raise exception
-        return competences
     except SQLAlchemyError as exception:
         current_app.logger.error(exception)
-        raise SQLAlchemyError('COULD_NOT_FETCH_COMPETENCES')
+        raise SQLAlchemyError('COULD NOT FETCH COMPETENCES')
+
+    if not competences:
+        exception = NoResultFound('NO COMPETENCES FOUND')
+        current_app.logger.error(exception)
+        raise exception
+    return competences
