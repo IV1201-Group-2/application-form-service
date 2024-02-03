@@ -15,13 +15,14 @@ def register_jwt_handlers(jwt: JWTManager) -> None:
         """Callback for handling invalid JWT tokens.
 
         :param error: The InvalidTokenError object.
-        :returns: A tuple containing a JSON response and HTTP status code (401 Unauthorized).
+        :returns: A tuple containing a JSON response and
+        HTTP status code (401 Unauthorized).
         """
 
         current_app.logger.warning(f'Invalid JWT provided: {error}')
         return jsonify({
-            'error': 'Invalid token provided',
-            'details': str(error)
+            'error': 'INVALID_TOKEN',
+            'details': 'Invalid token provided'
         }), 401
 
     @jwt.expired_token_loader
@@ -29,13 +30,13 @@ def register_jwt_handlers(jwt: JWTManager) -> None:
         """Callback for handling expired JWT tokens.
 
         :param header: The JWT header.
-        :param payload: The JWT payload.
-        :returns: A tuple containing a JSON response and HTTP status code (401 Unauthorized).
+        :param payload: The JWT payload. :returns: A tuple containing a JSON response
+        and HTTP status code (401 Unauthorized).
         """
 
         current_app.logger.warning('Expired JWT token')
         return jsonify({
-            'error': 'Token has expired',
+            'error': 'TOKEN_EXPIRED',
             'details': 'The token has expired. Please log in again.'
         }), 401
 
@@ -44,11 +45,12 @@ def register_jwt_handlers(jwt: JWTManager) -> None:
         """Callback for handling unauthorized requests.
 
         :param error: A description of the unauthorized request.
-        :returns: A tuple containing a JSON response and HTTP status code (401 Unauthorized).
+        :returns: A tuple containing a JSON response and
+        HTTP status code (401 Unauthorized).
         """
-        
+
         current_app.logger.warning(f'Unauthorized request: {error}')
         return jsonify({
-            'error': 'Unauthorized',
-            'details': str(error)
+            'error': 'UNAUTHORIZED',
+            'details': 'Unauthorized request. Please log in.'
         }), 401
