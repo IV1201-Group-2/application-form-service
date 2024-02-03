@@ -10,6 +10,6 @@ LOG_FILENAME = os.environ.get('LOG_FILENAME', 'app.log')
 LOG_FILE = os.path.join(LOG_DIR, LOG_FILENAME)
 
 if 'DYNO' in os.environ:
-    LOG_TO_STDOUT = True
+	LOG_TO_STDOUT = True
 else:
-    LOG_TO_STDOUT = False
+	LOG_TO_STDOUT = False
