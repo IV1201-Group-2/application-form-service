@@ -1,10 +1,9 @@
-import datetime
 from unittest.mock import patch
 
-from flask_jwt_extended import create_access_token
 from sqlalchemy.exc import SQLAlchemyError
 
-from tests.utilities.test_utilities import remove_test_user_from_db, \
+from tests.utilities.test_utilities import generate_token_for_user_id_1, \
+    remove_test_user_from_db, \
     setup_test_user_in_db
 
 
@@ -50,14 +49,3 @@ def test_get_personal_info_sqlalchemy_error(app_with_client):
         assert response.status_code == 500
         assert response.json['error'] == 'COULD_NOT_FETCH_USER'
         assert response.json['details'] == 'Could not fetch user from database'
-
-
-def generate_token_for_user_id_1(app) -> tuple[str, str]:
-    token_data = {
-        "id": 1,
-        "iat": datetime.datetime(2023, 1, 1).timestamp(),
-        "exp": datetime.datetime(2025, 1, 2).timestamp()
-    }
-
-    with app.app_context():
-        return create_access_token(identity=token_data)
