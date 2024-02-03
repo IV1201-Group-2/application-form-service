@@ -30,7 +30,8 @@ def test_fetch_personal_info_sqlalchemy_error(app_with_client):
     app, _ = app_with_client
 
     with patch(
-            'app.services.personal_info_service.get_person_from_db') as mock_fetch:
+            'app.services.personal_info_service'
+            '.get_person_from_db') as mock_fetch:
         mock_fetch.side_effect = SQLAlchemyError("DATABASE CONNECTION ERROR.")
 
         with app.app_context():
