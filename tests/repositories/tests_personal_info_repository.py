@@ -4,10 +4,13 @@ import pytest
 from sqlalchemy.exc import SQLAlchemyError, NoResultFound
 
 from app.repositories.personal_info_repository import get_person_from_db
+from tests.utilities.tests_utilities import setup_test_user_in_db, \
+    remove_test_user_from_db
 
 
 def test_get_person_from_db_success(app_with_client):
     app, _ = app_with_client
+    setup_test_user_in_db(app)
     with app.app_context():
         person = get_person_from_db(1)
         assert person.name == 'test'
@@ -16,6 +19,7 @@ def test_get_person_from_db_success(app_with_client):
 
 def test_get_person_from_db_no_result(app_with_client):
     app, _ = app_with_client
+    remove_test_user_from_db(app)
     with app.app_context():
         with pytest.raises(NoResultFound) as e:
             get_person_from_db(2)
