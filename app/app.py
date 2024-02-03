@@ -68,7 +68,7 @@ def register_blueprints(application_form_api: Flask) -> None:
     application_form_api.register_blueprint(
             personal_info_bp, url_prefix='/applicant/personal_info')
     application_form_api.register_blueprint(
-            competences_bp, url_prefix='/competences/')
+            competences_bp, url_prefix='/competences')
 
 
 if __name__ == "__main__":
