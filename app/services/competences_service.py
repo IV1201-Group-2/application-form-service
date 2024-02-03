@@ -1,4 +1,4 @@
-from sqlalchemy.exc import SQLAlchemyError, NoResultFound
+from sqlalchemy.exc import NoResultFound, SQLAlchemyError
 
 from app.models.competence import Competence
 from app.repositories.competences_repository import get_competences_from_db
@@ -26,4 +26,5 @@ def __competences_to_dict(competences: list[Competence]) -> dict:
     :return: A dictionary containing the competences.
     """
 
-    return {competence.competence_id: competence.name for competence in competences}
+    return {competence.competence_id: competence.name
+            for competence in competences}
