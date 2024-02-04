@@ -45,9 +45,9 @@ jobs:
         run: |
           mypy app --html-report mypy_report
 
-      - name: Run pytest with parallel execution and coverage
+      - name: Run pytest with coverage
         run: |
-          pytest -n auto --cov=app --cov-report=xml:coverage.xml
+          pytest --cov=app --cov-report=xml:coverage.xml
 
       - name: Run security scanning
         run: |
