@@ -15,10 +15,9 @@ def get_competences_from_db() -> list[Competence]:
         competences = Competence.query.all()
     except SQLAlchemyError as exception:
         current_app.logger.error(exception)
-        raise SQLAlchemyError('COULD NOT FETCH COMPETENCES')
+        raise SQLAlchemyError('COULD NOT FETCH COMPETENCES') from exception
 
     if not competences:
-        exception = NoResultFound('NO COMPETENCES FOUND')
-        current_app.logger.error(exception)
-        raise exception
+        current_app.logger.error(NoResultFound('NO COMPETENCES FOUND'))
+        raise NoResultFound('NO COMPETENCES FOUND')
     return competences
