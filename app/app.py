@@ -8,19 +8,17 @@ from app.extensions import database, jwt
 from app.routes.personal_info_routes import personal_info_bp
 
 
-def create_app(test_config: bool = None) -> Flask:
+def create_app() -> Flask:
     """
     Creates and configures the Flask application.
 
-    :param test_config: The configuration for the Flask application.
     :return: The configured Flask application.
     """
 
     application_form_api = Flask(__name__)
     application_form_api.config.from_pyfile('config.py')
 
-    if not test_config:
-        setup_logging(application_form_api)
+    setup_logging(application_form_api)
     setup_extensions(application_form_api)
     register_blueprints(application_form_api)
 
