@@ -1,3 +1,5 @@
+from typing import NoReturn
+
 from flask import current_app
 from sqlalchemy.exc import NoResultFound, SQLAlchemyError
 
@@ -20,7 +22,7 @@ def get_person_from_db(user_id: int) -> Person:
         __log_and_raise(SQLAlchemyError, 'DATABASE CONNECTION ERROR.')
 
 
-def __log_and_raise(exception_type: type, message: str) -> None:
+def __log_and_raise(exception_type: type, message: str) -> NoReturn:
     """
     Logs an error and raises an exception.
 

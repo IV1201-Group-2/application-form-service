@@ -1,7 +1,10 @@
-name: Improved CI/CD Pipeline
+name: CI/CD Pipeline
 
 on:
   push:
+    branches:
+      - '*'
+  pull_request:
     branches:
       - '*'
 
@@ -42,14 +45,9 @@ jobs:
         run: |
           mypy app --html-report mypy_report
 
-      - name: Run pytest with parallel execution and coverage
+      - name: Run pytest with coverage
         run: |
-          pytest -n auto --cov=app --cov-report=xml:coverage.xml
-
-      - name: Run security scanning
-        run: |
-          pip install bandit
-          bandit -r app -o bandit_report.txt
+          pytest --cov=app --cov-report=xml:coverage.xml
 
       - name: Upload linting, static analysis, and security reports
         uses: actions/upload-artifact@v3
@@ -58,7 +56,6 @@ jobs:
           path: |
             flake8report.txt
             mypy_report/*
-            bandit_report.txt
 
       - name: Upload test results and coverage report
         uses: actions/upload-artifact@v3

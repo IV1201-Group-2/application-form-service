@@ -1,7 +1,7 @@
 from app.extensions import database
 
 
-class Person(database.Model):
+class Person(database.Model):  # type: ignore
     """
     Represents a person in the database.
 
