@@ -32,14 +32,17 @@ def setup_logging(application_form_api: Flask) -> None:
     :param application_form_api: The Flask application.
     """
 
-    log_dir = application_form_api.config.get('LOG_DIR')
-    if not os.path.exists(log_dir):
-        os.makedirs(log_dir)
+    log_dir = application_form_api.config.get('LOG_DIR', 'logs')
+    os.makedirs(
+            log_dir, exist_ok=True)
 
     logging.basicConfig(
-            level=application_form_api.config.get('LOG_LEVEL'),
-            format=application_form_api.config.get('LOG_FORMAT'),
-            filename=application_form_api.config.get('LOG_FILE')
+            level=application_form_api.config.get('LOG_LEVEL', logging.INFO),
+            format=application_form_api.config.get(
+                    'LOG_FORMAT',
+                    '%(asctime)s - %(name)s - %(levelname)s - %(message)s'),
+            filename=application_form_api.config.get(
+                    'LOG_FILE', os.path.join(log_dir, 'app.log'))
     )
 
 
