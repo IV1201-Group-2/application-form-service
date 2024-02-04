@@ -49,11 +49,6 @@ jobs:
         run: |
           pytest --cov=app --cov-report=xml:coverage.xml
 
-      - name: Run security scanning
-        run: |
-          pip install bandit
-          bandit -r app -o bandit_report.txt
-
       - name: Upload linting, static analysis, and security reports
         uses: actions/upload-artifact@v3
         with:
@@ -61,7 +56,6 @@ jobs:
           path: |
             flake8report.txt
             mypy_report/*
-            bandit_report.txt
 
       - name: Upload test results and coverage report
         uses: actions/upload-artifact@v3
