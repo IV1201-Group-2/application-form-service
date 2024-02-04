@@ -5,7 +5,7 @@ from app.app import create_app, database
 
 @pytest.fixture(scope='module')
 def app_with_client():
-    flask_app = create_app(test_config=True)
+    flask_app = create_app()
     flask_app.config.update({
         'TESTING': True,
         'JWT_SECRET_KEY': 'your-test-secret-key',
