@@ -1,7 +1,7 @@
 from app.extensions import database
 
 
-class Competence(database.Model):
+class Competence(database.Model):  # type: ignore
     """
     Represents a competence in the database.
 
