@@ -3,7 +3,7 @@ from typing import NoReturn
 from flask import current_app
 from sqlalchemy.exc import NoResultFound, SQLAlchemyError
 
-from app.models.person import Person
+from app.models.applicant.person import Person
 
 
 def get_person_from_db(user_id: int) -> Person:

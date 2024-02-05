@@ -1,7 +1,8 @@
 from sqlalchemy.exc import NoResultFound, SQLAlchemyError
 
-from app.models.person import Person
-from app.repositories.personal_info_repository import get_person_from_db
+from app.models.applicant.person import Person
+from app.repositories.applicant.personal_info_repository import \
+    get_person_from_db
 
 
 def fetch_personal_info(user_id: int) -> dict[str, str]:

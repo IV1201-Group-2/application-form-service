@@ -2,7 +2,7 @@ from flask import Blueprint, Response, current_app, jsonify
 from flask_jwt_extended import get_jwt_identity, jwt_required
 from sqlalchemy.exc import NoResultFound, SQLAlchemyError
 
-from app.services.personal_info_service import fetch_personal_info
+from app.services.applicant.personal_info_service import fetch_personal_info
 
 personal_info_bp = Blueprint('personal_info', __name__)
 

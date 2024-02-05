@@ -3,7 +3,7 @@ from unittest.mock import patch
 import pytest
 from sqlalchemy.exc import NoResultFound, SQLAlchemyError
 
-from app.services.personal_info_service import fetch_personal_info
+from app.services.applicant.personal_info_service import fetch_personal_info
 from tests.utilities.test_utilities import remove_test_user_from_db, \
     setup_test_user_in_db
 
@@ -30,7 +30,7 @@ def test_fetch_personal_info_sqlalchemy_error(app_with_client):
     app, _ = app_with_client
 
     with patch(
-            'app.services.personal_info_service'
+            'app.services.applicant.personal_info_service'
             '.get_person_from_db') as mock_fetch:
         mock_fetch.side_effect = SQLAlchemyError("DATABASE CONNECTION ERROR.")
 

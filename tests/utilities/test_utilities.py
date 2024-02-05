@@ -3,8 +3,8 @@ import datetime
 from flask_jwt_extended import create_access_token
 
 from app.extensions import database
+from app.models.applicant.person import Person
 from app.models.competence import Competence
-from app.models.person import Person
 
 
 def setup_test_user_in_db(app):
