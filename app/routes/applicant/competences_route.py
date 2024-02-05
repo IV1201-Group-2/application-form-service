@@ -28,7 +28,7 @@ def add_applicant_competence() -> tuple[Response, int]:
         return jsonify({'error': 'INVALID_JSON_PAYLOAD'}), 400
 
     competence_id = int(request.json.get('competence_id'))
-    experience = int(request.json.get('experience'))
+    experience = float(request.json.get('experience'))
 
     if not competence_id and competence_id > 0:
         return jsonify({'error': 'INVALID_COMPETENCE_ID'}), 400
