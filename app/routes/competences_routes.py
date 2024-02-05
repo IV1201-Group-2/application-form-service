@@ -18,7 +18,7 @@ def get_competences() -> tuple[Response, int]:
 
     try:
         competences = fetch_competences()
-        current_app.logger.info(f'Responded with selectable competences.')
+        current_app.logger.info('Responded with selectable competences.')
         return jsonify(competences), 200
     except NoResultFound:
         return jsonify({
