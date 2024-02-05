@@ -38,7 +38,7 @@ def test_get_personal_info_sqlalchemy_error(app_with_client):
     app, test_client = app_with_client
     token = generate_token_for_user_id_1(app)
 
-    with patch('app.routes.applicant.personal_info_routes.'
+    with patch('app.routes.applicant.personal_info_route.'
                'fetch_personal_info') as mock_fetch:
         mock_fetch.side_effect = SQLAlchemyError("A database error occurred")
 
