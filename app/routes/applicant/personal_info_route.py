@@ -4,7 +4,7 @@ from sqlalchemy.exc import NoResultFound, SQLAlchemyError
 
 from app.services.applicant.personal_info_service import fetch_personal_info
 
-personal_info_bp = Blueprint('personal_info', __name__)
+personal_info_bp = Blueprint('personal-info', __name__)
 
 
 @personal_info_bp.route('/', methods=['GET'])

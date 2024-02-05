@@ -13,7 +13,7 @@ def test_get_personal_info_success(app_with_client):
     token = generate_token_for_user_id_1(app)
 
     response = test_client.get(
-            '/application-form/applicant/personal_info/',
+            '/application-form/applicant/personal-info/',
             headers={'Authorization': f'Bearer {token}'})
     assert response.status_code == 200
     assert response.json['name'] == 'test'
@@ -27,7 +27,7 @@ def test_get_personal_info_no_result(app_with_client):
     token = generate_token_for_user_id_1(app)
 
     response = test_client.get(
-            '/application-form/applicant/personal_info/',
+            '/application-form/applicant/personal-info/',
             headers={'Authorization': f'Bearer {token}'})
     assert response.status_code == 404
     assert response.json['error'] == 'USER_NOT_FOUND'
@@ -43,7 +43,7 @@ def test_get_personal_info_sqlalchemy_error(app_with_client):
         mock_fetch.side_effect = SQLAlchemyError("A database error occurred")
 
         response = test_client.get(
-                '/application-form/applicant/personal_info/',
+                '/application-form/applicant/personal-info/',
                 headers={'Authorization': f'Bearer {token}'})
 
         assert response.status_code == 500

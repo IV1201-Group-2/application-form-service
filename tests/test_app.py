@@ -24,4 +24,4 @@ def test_extensions_setup(app_with_client):
 def test_blueprint_registration(app_with_client):
     app, _ = app_with_client
     blueprints = [bp.name for bp in app.blueprints.values()]
-    assert 'personal_info' in blueprints
+    assert 'personal-info' in blueprints
