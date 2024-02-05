@@ -15,7 +15,7 @@ def store_applicant_competences(user_id: int, competence_id: int,
     :param user_id: The ID of the user to associate the competence with.
     :param competence_id: The ID of the competence to store.
     :param experience: The years of experience in the competence.
-    :returns: A dictionary containing the stored applicant competence information.
+    :returns: A dict containing the stored applicant competence information.
     :raises SQLAlchemyError: If there is an error with the database operation,
             an SQLAlchemyError is raised.
     """
@@ -33,8 +33,8 @@ def __applicant_competence_to_dict(
     """
     Convert an applicant competence object to a dictionary.
 
-    This function takes an ApplicantCompetence object and converts it into a dictionary
-    containing relevant information.
+    This function takes an ApplicantCompetence object and converts it into a
+    dictionary  containing relevant information.
 
     :param applicant_competence: The ApplicantCompetence object to convert.
     :returns: A dictionary representation of the applicant competence.
