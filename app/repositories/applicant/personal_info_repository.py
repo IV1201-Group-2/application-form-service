@@ -19,4 +19,4 @@ def get_person_from_db(user_id: int) -> Person:
         raise NoResultFound(f'USER NOT FOUND: {user_id}.')
     except SQLAlchemyError as exception:
         current_app.logger.error(exception)
-        raise SQLAlchemyError('COULD NOT FETCH COMPETENCES.')
+        raise SQLAlchemyError('COULD NOT FETCH PERSONAL INFO.')
