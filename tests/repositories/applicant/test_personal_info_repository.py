@@ -32,8 +32,11 @@ def test_get_person_from_db_sqlalchemy_error(app_with_client):
     app, _ = app_with_client
     with app.app_context():
         with patch('app.models.applicant.person.Person.query') as mock_query:
-            mock_query.filter_by.side_effect = SQLAlchemyError(
+            mock_filter_by = mock_query.filter_by.return_value
+            mock_filter_by.one.side_effect = SQLAlchemyError(
                     "A database error occurred")
-            with pytest.raises(SQLAlchemyError) as e:
+            with pytest.raises(SQLAlchemyError) as exception_info:
                 get_person_from_db(1)
-            assert str(e.value) == 'DATABASE CONNECTION ERROR.'
+
+        mock_query.filter_by.assert_called_once_with(person_id=1)
+        assert str(exception_info.value) == 'COULD NOT FETCH PERSONAL INFO.'
