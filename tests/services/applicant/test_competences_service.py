@@ -1,4 +1,7 @@
+from unittest.mock import patch
+
 import pytest
+from sqlalchemy.exc import SQLAlchemyError
 
 from app.services.applicant.competences_service import \
     store_applicant_competences
@@ -26,10 +29,6 @@ def test_store_applicant_competences_success(app_with_client):
 
     remove_test_user_from_db(app)
     remove_competences_from_db(app)
-
-
-from unittest.mock import patch
-from sqlalchemy.exc import SQLAlchemyError
 
 
 def test_store_applicant_competences_sqlalchemy_error(app_with_client):
