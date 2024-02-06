@@ -17,10 +17,11 @@ def test_get_competences_success(app_with_client):
     assert response.status_code == 200
     assert response.json == {'1': 'tester', '2': 'developer'}
 
+    remove_competences_from_db(app)
+
 
 def test_competences_no_result(app_with_client):
     app, test_client = app_with_client
-    remove_competences_from_db(app)
     token = generate_token_for_user_id_1(app)
 
     response = test_client.get(

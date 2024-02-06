@@ -16,10 +16,11 @@ def test_fetch_personal_info_success(app_with_client):
         assert result['name'] == 'test'
         assert result['surname'] == 'tester'
 
+    remove_test_user_from_db(app)
+
 
 def test_fetch_personal_info_no_result(app_with_client):
     app, _ = app_with_client
-    remove_test_user_from_db(app)
     with app.app_context():
         with pytest.raises(NoResultFound) as exception:
             fetch_personal_info(2)

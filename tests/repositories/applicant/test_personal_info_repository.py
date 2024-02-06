@@ -17,10 +17,11 @@ def test_get_person_from_db_success(app_with_client):
         assert person.name == 'test'
         assert person.surname == 'tester'
 
+    remove_test_user_from_db(app)
+
 
 def test_get_person_from_db_no_result(app_with_client):
     app, _ = app_with_client
-    remove_test_user_from_db(app)
     with app.app_context():
         with pytest.raises(NoResultFound) as e:
             get_person_from_db(2)

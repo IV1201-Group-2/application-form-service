@@ -20,10 +20,11 @@ def test_get_personal_info_success(app_with_client):
     assert response.json['surname'] == 'tester'
     assert response.json['role'] == 2
 
+    remove_test_user_from_db(app)
+
 
 def test_get_personal_info_no_result(app_with_client):
     app, test_client = app_with_client
-    remove_test_user_from_db(app)
     token = generate_token_for_user_id_1(app)
 
     response = test_client.get(

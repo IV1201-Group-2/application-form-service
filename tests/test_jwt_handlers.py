@@ -2,7 +2,8 @@ import datetime
 
 from flask_jwt_extended import create_access_token
 
-from tests.utilities.test_utilities import setup_test_user_in_db
+from tests.utilities.test_utilities import remove_test_user_from_db, \
+    setup_test_user_in_db
 
 
 def test_valid_token(app_with_client):
@@ -17,6 +18,7 @@ def test_valid_token(app_with_client):
                                headers={
                                    'Authorization': f'Bearer {valid_token}'})
     assert response.status_code == 200
+    remove_test_user_from_db(app)
 
 
 def test_invalid_token(app_with_client):
@@ -47,6 +49,7 @@ def test_expired_token(app_with_client):
                                    'Authorization': f'Bearer {expired_token}'})
     assert response.status_code == 401
     assert response.json['error'] == 'TOKEN_EXPIRED'
+    remove_test_user_from_db(app)
 
 
 def test_unauthorized_request(app_with_client):

@@ -18,10 +18,11 @@ def test_get_competences_from_db_success(app_with_client):
         assert competences[1].competence_id == 2
         assert competences[1].name == 'developer'
 
+    remove_competences_from_db(app)
+
 
 def test_get_competences_from_db_no_result(app_with_client):
     app, _ = app_with_client
-    remove_competences_from_db(app)
     with app.app_context():
         with pytest.raises(NoResultFound) as exception_info:
             get_competences_from_db()
