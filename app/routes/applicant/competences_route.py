@@ -30,12 +30,12 @@ def add_applicant_competence() -> tuple[Response, int]:
     competence_id = int(request.json.get('competence_id'))
     experience = float(request.json.get('experience'))
 
-    if not competence_id and competence_id > 0:
+    if not competence_id or competence_id <= 0:
         return jsonify({'error': 'INVALID_COMPETENCE_ID'}), 400
-    elif not experience and 0 <= experience <= 100:
+    elif not experience or experience < 0.0 or experience > 100.0:
         return jsonify({'error': 'INVALID_EXPERIENCE_VALUE'}), 400
 
-    current_user = get_jwt_identity()
+    current_user = get_jwt_identity().get('id')
 
     try:
         persisted_competence = store_applicant_competences(current_user,
