@@ -1,3 +1,6 @@
+from unittest.mock import patch
+
+import pytest
 from sqlalchemy.exc import SQLAlchemyError
 
 from app.models.applicant.competence_profile import CompetenceProfile
@@ -15,17 +18,13 @@ def test_insert_competences_in_db_success(app_with_client):
 
     with app.app_context():
         insert_competences_in_db(competence_profile)
-        inserted_profile = CompetenceProfile.query.filter_by \
-            (person_id=1).first()
+        inserted_profile = CompetenceProfile.query.filter_by(
+                person_id=1).first()
         assert inserted_profile is not None
         assert inserted_profile.years_of_experience == 5
 
     remove_test_user_from_db(app)
     remove_competences_from_db(app)
-
-
-from unittest.mock import patch
-import pytest
 
 
 def test_insert_competences_in_db_failure(app_with_client):
