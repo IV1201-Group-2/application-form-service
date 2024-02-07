@@ -16,10 +16,11 @@ def test_fetch_competences_success(app_with_client):
         assert result[1] == 'tester'
         assert result[2] == 'developer'
 
+    remove_competences_from_db(app)
+
 
 def test_fetch_competences_no_result(app_with_client):
     app, _ = app_with_client
-    remove_competences_from_db(app)
     with app.app_context():
         with pytest.raises(NoResultFound) as exception_info:
             fetch_competences()

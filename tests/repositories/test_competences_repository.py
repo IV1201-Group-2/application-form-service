@@ -18,10 +18,11 @@ def test_get_competences_from_db_success(app_with_client):
         assert competences[1].competence_id == 2
         assert competences[1].name == 'developer'
 
+    remove_competences_from_db(app)
+
 
 def test_get_competences_from_db_no_result(app_with_client):
     app, _ = app_with_client
-    remove_competences_from_db(app)
     with app.app_context():
         with pytest.raises(NoResultFound) as exception_info:
             get_competences_from_db()
@@ -30,7 +31,7 @@ def test_get_competences_from_db_no_result(app_with_client):
         assert str(exception) == "NO COMPETENCES FOUND"
 
 
-def test_get_person_from_db_sqlalchemy_error(app_with_client):
+def test_get_competences_from_db_sqlalchemy_error(app_with_client):
     app, _ = app_with_client
     with app.app_context():
         with patch('app.models.competence.Competence.query') as mock_query:
@@ -38,5 +39,6 @@ def test_get_person_from_db_sqlalchemy_error(app_with_client):
                     "A database error occurred")
             with pytest.raises(SQLAlchemyError) as exception_info:
                 get_competences_from_db()
-            exception = exception_info.value
-            assert str(exception) == "COULD NOT FETCH COMPETENCES"
+
+            assert "COULD NOT FETCH COMPETENCES" in str(exception_info.value)
+            mock_query.all.assert_called_once()

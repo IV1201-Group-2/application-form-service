@@ -5,8 +5,9 @@ from flask import Flask
 
 from app import jwt_handlers
 from app.extensions import database, jwt
+from app.routes.applicant.competences_route import applicant_competences_bp
+from app.routes.applicant.personal_info_route import personal_info_bp
 from app.routes.competences_routes import competences_bp
-from app.routes.personal_info_routes import personal_info_bp
 
 
 def create_app() -> Flask:
@@ -67,9 +68,13 @@ def register_blueprints(application_form_api: Flask) -> None:
     """
 
     application_form_api.register_blueprint(
-            personal_info_bp, url_prefix='/applicant/personal_info')
+            personal_info_bp,
+            url_prefix='/application-form/applicant/personal-info')
     application_form_api.register_blueprint(
-            competences_bp, url_prefix='/competences')
+            applicant_competences_bp,
+            url_prefix='/application-form/applicant/competences')
+    application_form_api.register_blueprint(
+            competences_bp, url_prefix='/application-form/competences')
 
 
 if __name__ == "__main__":

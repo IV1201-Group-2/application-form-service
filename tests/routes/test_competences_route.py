@@ -12,18 +12,21 @@ def test_get_competences_success(app_with_client):
     token = generate_token_for_user_id_1(app)
 
     response = test_client.get(
-            '/competences/', headers={'Authorization': f'Bearer {token}'})
+            '/application-form/competences/',
+            headers={'Authorization': f'Bearer {token}'})
     assert response.status_code == 200
     assert response.json == {'1': 'tester', '2': 'developer'}
+
+    remove_competences_from_db(app)
 
 
 def test_competences_no_result(app_with_client):
     app, test_client = app_with_client
-    remove_competences_from_db(app)
     token = generate_token_for_user_id_1(app)
 
     response = test_client.get(
-            '/competences/', headers={'Authorization': f'Bearer {token}'})
+            '/application-form/competences/',
+            headers={'Authorization': f'Bearer {token}'})
     assert response.status_code == 404
     assert response.json['error'] == 'COMPETENCES_NOT_FOUND'
     assert response.json['details'] == 'No competences found in the database'
@@ -38,7 +41,8 @@ def test_get_personal_info_sqlalchemy_error(app_with_client):
         mock_fetch.side_effect = SQLAlchemyError("A database error occurred")
 
         response = test_client.get(
-                '/competences/', headers={'Authorization': f'Bearer {token}'})
+                '/application-form/competences/',
+                headers={'Authorization': f'Bearer {token}'})
 
         assert response.status_code == 500
         assert response.json['error'] == 'COULD_NOT_FETCH_COMPETENCES'
