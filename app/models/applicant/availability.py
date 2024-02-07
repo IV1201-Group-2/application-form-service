@@ -22,7 +22,7 @@ class Availability(database.Model):  # type: ignore
         """
         Initializes a new Availability object.
 
-        :param person_id: The ID of the person associated with this availability.
+        :param person_id: The ID of the user associated with this availability.
         :param from_date: The start date of the availability.
         :param to_date: The end date of the availability.
         """
