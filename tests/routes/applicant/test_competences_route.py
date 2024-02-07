@@ -14,7 +14,7 @@ def test_add_applicant_competence_success(app_with_client):
     token = generate_token_for_user_id_1(app)
 
     response = test_client.post(
-            '/application-form/applicant/competences/',
+            '/api/application-form/applicant/competences/',
             json={
                 'competence_id': 1,
                 'experience': 5.0
@@ -38,7 +38,7 @@ def test_add_applicant_competence_invalid_experience_value(app_with_client):
     token = generate_token_for_user_id_1(app)
 
     response = test_client.post(
-            '/application-form/applicant/competences/',
+            '/api/application-form/applicant/competences/',
             json={
                 'competence_id': 1,
                 'experience': -1.0
@@ -58,7 +58,7 @@ def test_add_applicant_competence_invalid_competence_id(app_with_client):
     token = generate_token_for_user_id_1(app)
 
     response = test_client.post(
-            '/application-form/applicant/competences/',
+            '/api/application-form/applicant/competences/',
             json={
                 'competence_id': 0,
                 'experience': 1.0
@@ -81,7 +81,7 @@ def test_get_personal_info_sqlalchemy_error(app_with_client):
         mock_fetch.side_effect = SQLAlchemyError("A database error occurred")
 
         response = test_client.post(
-                '/application-form/applicant/competences/',
+                '/api/application-form/applicant/competences/',
                 json={
                     'competence_id': 1,
                     'experience': 5.0
