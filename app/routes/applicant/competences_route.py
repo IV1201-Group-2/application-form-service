@@ -28,4 +28,13 @@ def add_applicant_competences() -> tuple[Response, int]:
     current_user = get_jwt_identity().get('id')
 
     result = store_applicant_competences(current_user, competences)
-    return jsonify(result), 200
+
+    if result['successes']:
+        if result['failures']:
+            return jsonify(result), 207
+        else:
+            return jsonify(result), 200
+    elif result['failures']:
+        return jsonify(result), 400
+    else:
+        return jsonify(result), 200
