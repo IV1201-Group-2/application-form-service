@@ -29,15 +29,13 @@ def test_fetch_competences_no_result(app_with_client):
         assert isinstance(exception, NoResultFound)
 
 
-def test_fetch_competences_sqlalchemy_error(app_with_client):
+@patch('app.services.competences_service.get_competences_from_db')
+def test_fetch_competences_sqlalchemy_error(mock_fetch, app_with_client):
     app, _ = app_with_client
 
-    with patch(
-            'app.services.competences_service'
-            '.get_competences_from_db') as mock_fetch:
-        mock_fetch.side_effect = SQLAlchemyError("DATABASE CONNECTION ERROR.")
+    mock_fetch.side_effect = SQLAlchemyError("DATABASE CONNECTION ERROR.")
 
-        with app.app_context():
-            with pytest.raises(SQLAlchemyError) as exception:
-                fetch_competences()
-            assert str(exception.value) == 'DATABASE CONNECTION ERROR.'
+    with app.app_context():
+        with pytest.raises(SQLAlchemyError) as exception:
+            fetch_competences()
+        assert str(exception.value) == 'DATABASE CONNECTION ERROR.'
