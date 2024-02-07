@@ -5,27 +5,32 @@ from app.repositories.applicant.competences_repository import \
     insert_competences_in_db
 
 
-def store_applicant_competences(user_id: int, competence_id: int,
-                                experience: float) -> dict[str, str]:
+def store_applicant_competences(user_id: int, competences: list[dict]) -> dict:
     """
     Store applicant competences in the database.
 
-    This function stores the applicant's competences in the database.
+    This function takes a list of competences and stores them in the database.
 
-    :param user_id: The ID of the user to associate the competence with.
-    :param competence_id: The ID of the competence to store.
-    :param experience: The years of experience in the competence.
-    :returns: A dict containing the stored applicant competence information.
-    :raises SQLAlchemyError: If there is an error with the database operation,
-            an SQLAlchemyError is raised.
+    :param user_id: The ID of the user to store the competences for.
+    :param competences: A list of competences to store.
+    :returns: A dictionary containing the results of the operation.
     """
-    try:
-        applicant_competence = CompetenceProfile(user_id, competence_id,
-                                                 experience)
-        insert_competences_in_db(applicant_competence)
-        return __applicant_competence_to_dict(applicant_competence)
-    except SQLAlchemyError as exception:
-        raise exception
+    successes = []
+    failures = []
+
+    for competence in competences:
+        try:
+            competence_id, experience = __valid_input_competence(competence)
+            applicant_competence = CompetenceProfile(user_id, competence_id,
+                                                     experience)
+            insert_competences_in_db(applicant_competence)
+            successes.append(
+                    __applicant_competence_to_dict(applicant_competence))
+        except (ValueError, SQLAlchemyError) as exception:
+            failures.append({'competence_id': competence.get('competence_id'),
+                             'error': str(exception)})
+
+    return {'successes': successes, 'failures': failures}
 
 
 def __applicant_competence_to_dict(
@@ -45,3 +50,35 @@ def __applicant_competence_to_dict(
         'competence_id': applicant_competence.competence_id,
         'years_of_experience': applicant_competence.years_of_experience
     }
+
+
+def __valid_input_competence(competence: dict) -> tuple[int, float]:
+    """
+    Validate the input data.
+
+    This function takes a list of competences and checks if the data is valid.
+
+    :param competence: The list of competences to validate.
+    :returns: True if the data is valid, False otherwise.
+    """
+
+    competence_id_raw = competence.get('competence_id')
+    experience_raw = competence.get('experience')
+
+    if competence_id_raw is None or not isinstance(competence_id_raw,
+                                                   (int, str)):
+        raise ValueError(
+                'competence_id is missing or not an int or string')
+
+    if experience_raw is None or not isinstance(experience_raw,
+                                                (float, str, int)):
+        raise ValueError(
+                'experience is missing or not a float, string, or int')
+
+    competence_id = int(competence_id_raw)
+    experience = float(experience_raw)
+
+    if competence_id <= 0 or experience < 0.0 or experience > 100.0:
+        raise ValueError('Invalid competence ID or experience value')
+
+    return competence_id, experience

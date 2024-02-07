@@ -12,7 +12,7 @@ def test_get_competences_success(app_with_client):
     token = generate_token_for_user_id_1(app)
 
     response = test_client.get(
-            '/application-form/competences/',
+            '/api/application-form/competences/',
             headers={'Authorization': f'Bearer {token}'})
     assert response.status_code == 200
     assert response.json == {'1': 'tester', '2': 'developer'}
@@ -25,26 +25,25 @@ def test_competences_no_result(app_with_client):
     token = generate_token_for_user_id_1(app)
 
     response = test_client.get(
-            '/application-form/competences/',
+            '/api/application-form/competences/',
             headers={'Authorization': f'Bearer {token}'})
     assert response.status_code == 404
     assert response.json['error'] == 'COMPETENCES_NOT_FOUND'
     assert response.json['details'] == 'No competences found in the database'
 
 
-def test_get_personal_info_sqlalchemy_error(app_with_client):
+@patch('app.routes.competences_routes.fetch_competences')
+def test_get_personal_info_sqlalchemy_error(mock_fetch, app_with_client):
     app, test_client = app_with_client
     token = generate_token_for_user_id_1(app)
 
-    with patch('app.routes.competences_routes.'
-               'fetch_competences') as mock_fetch:
-        mock_fetch.side_effect = SQLAlchemyError("A database error occurred")
+    mock_fetch.side_effect = SQLAlchemyError("A database error occurred")
 
-        response = test_client.get(
-                '/application-form/competences/',
-                headers={'Authorization': f'Bearer {token}'})
+    response = test_client.get(
+            '/api/application-form/competences/',
+            headers={'Authorization': f'Bearer {token}'})
 
-        assert response.status_code == 500
-        assert response.json['error'] == 'COULD_NOT_FETCH_COMPETENCES'
-        assert response.json['details'] == ('Could not '
-                                            'fetch competences from database')
+    assert response.status_code == 500
+    assert response.json['error'] == 'COULD_NOT_FETCH_COMPETENCES'
+    assert response.json['details'] == ('Could not '
+                                        'fetch competences from database')

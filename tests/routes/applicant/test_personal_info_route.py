@@ -13,7 +13,7 @@ def test_get_personal_info_success(app_with_client):
     token = generate_token_for_user_id_1(app)
 
     response = test_client.get(
-            '/application-form/applicant/personal-info/',
+            '/api/application-form/applicant/personal-info/',
             headers={'Authorization': f'Bearer {token}'})
     assert response.status_code == 200
     assert response.json['name'] == 'test'
@@ -28,25 +28,24 @@ def test_get_personal_info_no_result(app_with_client):
     token = generate_token_for_user_id_1(app)
 
     response = test_client.get(
-            '/application-form/applicant/personal-info/',
+            '/api/application-form/applicant/personal-info/',
             headers={'Authorization': f'Bearer {token}'})
     assert response.status_code == 404
     assert response.json['error'] == 'USER_NOT_FOUND'
     assert response.json['details'] == 'User not found with id: 1'
 
 
-def test_get_personal_info_sqlalchemy_error(app_with_client):
+@patch('app.routes.applicant.personal_info_route.fetch_personal_info')
+def test_get_personal_info_sqlalchemy_error(mock_fetch, app_with_client):
     app, test_client = app_with_client
     token = generate_token_for_user_id_1(app)
 
-    with patch('app.routes.applicant.personal_info_route.'
-               'fetch_personal_info') as mock_fetch:
-        mock_fetch.side_effect = SQLAlchemyError("A database error occurred")
+    mock_fetch.side_effect = SQLAlchemyError("A database error occurred")
 
-        response = test_client.get(
-                '/application-form/applicant/personal-info/',
-                headers={'Authorization': f'Bearer {token}'})
+    response = test_client.get(
+            '/api/application-form/applicant/personal-info/',
+            headers={'Authorization': f'Bearer {token}'})
 
-        assert response.status_code == 500
-        assert response.json['error'] == 'COULD_NOT_FETCH_USER'
-        assert response.json['details'] == 'Could not fetch user from database'
+    assert response.status_code == 500
+    assert response.json['error'] == 'COULD_NOT_FETCH_USER'
+    assert response.json['details'] == 'Could not fetch user from database'

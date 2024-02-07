@@ -27,15 +27,13 @@ def test_fetch_personal_info_no_result(app_with_client):
         assert str(exception.value) == 'USER NOT FOUND: 2.'
 
 
-def test_fetch_personal_info_sqlalchemy_error(app_with_client):
+@patch('app.services.applicant.personal_info_service.get_person_from_db')
+def test_fetch_personal_info_sqlalchemy_error(mock_fetch, app_with_client):
     app, _ = app_with_client
 
-    with patch(
-            'app.services.applicant.personal_info_service'
-            '.get_person_from_db') as mock_fetch:
-        mock_fetch.side_effect = SQLAlchemyError("DATABASE CONNECTION ERROR.")
+    mock_fetch.side_effect = SQLAlchemyError("DATABASE CONNECTION ERROR.")
 
-        with app.app_context():
-            with pytest.raises(SQLAlchemyError) as exception:
-                fetch_personal_info(1)
-            assert str(exception.value) == 'DATABASE CONNECTION ERROR.'
+    with app.app_context():
+        with pytest.raises(SQLAlchemyError) as exception:
+            fetch_personal_info(1)
+        assert str(exception.value) == 'DATABASE CONNECTION ERROR.'
