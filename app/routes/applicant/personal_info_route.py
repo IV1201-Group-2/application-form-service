@@ -1,10 +1,12 @@
 from flask import Blueprint, Response, current_app, jsonify
+from flask_cors import CORS
 from flask_jwt_extended import get_jwt_identity, jwt_required
 from sqlalchemy.exc import NoResultFound, SQLAlchemyError
 
 from app.services.applicant.personal_info_service import fetch_personal_info
 
 personal_info_bp = Blueprint('personal-info', __name__)
+CORS(personal_info_bp)
 
 
 @personal_info_bp.route('/', methods=['GET'])
