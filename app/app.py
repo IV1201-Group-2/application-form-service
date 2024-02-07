@@ -2,6 +2,7 @@ import logging
 import os
 
 from flask import Flask
+from flask_cors import CORS
 
 from app import jwt_handlers
 from app.extensions import database, jwt
@@ -19,6 +20,8 @@ def create_app() -> Flask:
 
     application_form_api = Flask(__name__)
     application_form_api.config.from_pyfile('config.py')
+
+    CORS(application_form_api)
 
     setup_logging(application_form_api)
     setup_extensions(application_form_api)
