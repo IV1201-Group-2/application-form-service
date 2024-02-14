@@ -21,11 +21,9 @@ def test_valid_token(app_with_client):
 
 def test_invalid_token(app_with_client):
     app, test_client = app_with_client
-
-    with app.app_context():
-        valid_token = create_access_token(
-            identity={'id': 1}, expires_delta=datetime.timedelta(days=1))
-        invalid_token = valid_token + 'invalid'
+    setup_test_user_1_in_db(app)
+    valid_token = generate_token_for_user_id_1(app)
+    invalid_token = valid_token + 'invalid'
 
     response = test_client.get(
         '/api/application-form/applicant/personal-info/',
@@ -41,7 +39,9 @@ def test_expired_token(app_with_client):
 
     with app.app_context():
         expired_token = create_access_token(
-            identity={'id': 1}, expires_delta=datetime.timedelta(days=-1))
+            identity=None,
+            additional_claims={'id': 1},
+            expires_delta=datetime.timedelta(days=-1))
 
     response = test_client.get(
         '/api/application-form/applicant/personal-info/',
