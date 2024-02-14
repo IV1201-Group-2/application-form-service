@@ -9,7 +9,7 @@ if database_url.startswith('postgres://'):
 
 SQLALCHEMY_DATABASE_URI = database_url
 
-LOG_LEVEL = 'INFO'
+LOG_LEVEL = os.environ.get('LOG_LEVEL', 'INFO')
 LOG_FORMAT = '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
 LOG_DIR = os.environ.get('LOG_DIR', 'logs')
 LOG_FILENAME = os.environ.get('LOG_FILENAME', 'app.log')
