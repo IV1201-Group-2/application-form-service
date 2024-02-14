@@ -1,5 +1,5 @@
 from flask import Blueprint, Response, current_app, jsonify
-from flask_jwt_extended import get_jwt_identity, jwt_required
+from flask_jwt_extended import jwt_required, get_jwt
 from sqlalchemy.exc import NoResultFound, SQLAlchemyError
 
 from app.services.applicant.personal_info_service import fetch_personal_info
@@ -16,12 +16,12 @@ def get_personal_info() -> tuple[Response, int]:
     :return: A tuple containing the response and the status code.
     """
 
-    current_user = get_jwt_identity().get('id')
+    current_user = get_jwt()['id']
 
     try:
         personal_info = fetch_personal_info(current_user)
         current_app.logger.info(
-                f'Responded with personal info for {current_user}.')
+            f'Responded with personal info for {current_user}.')
         return jsonify(personal_info), 200
     except NoResultFound:
         return jsonify({
