@@ -7,7 +7,7 @@ from app.models.applicant.competence_profile import CompetenceProfile
 from app.repositories.applicant.competences_repository import \
     insert_competences_in_db
 from tests.utilities.test_utilities import remove_competences_from_db, \
-    remove_test_user_from_db, setup_competences_in_db
+    remove_test_user_1_from_db, setup_competences_in_db
 
 
 def test_insert_competences_in_db_success(app_with_client):
@@ -19,11 +19,11 @@ def test_insert_competences_in_db_success(app_with_client):
     with app.app_context():
         insert_competences_in_db(competence_profile)
         inserted_profile = CompetenceProfile.query.filter_by(
-                person_id=1).first()
+            person_id=1).first()
         assert inserted_profile is not None
         assert inserted_profile.years_of_experience == 5
 
-    remove_test_user_from_db(app)
+    remove_test_user_1_from_db(app)
     remove_competences_from_db(app)
 
 
