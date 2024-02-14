@@ -9,9 +9,8 @@ on:
       - '**'
 
 jobs:
-  build-and-test:
+  setup:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -37,18 +36,34 @@ jobs:
       - name: Install development dependencies
         run: pip install -r requirements-dev.txt
 
+  linting:
+    needs: setup
+    runs-on: ubuntu-latest
+    steps:
       - name: Run PEP8 linting and generate report
         run: |
           flake8 app --output-file=flake8report.txt
 
+  static_analysis:
+    needs: setup
+    runs-on: ubuntu-latest
+    steps:
       - name: Run static analysis and generate report
         run: |
           mypy app --html-report mypy_report
 
+  tests:
+    needs: setup
+    runs-on: ubuntu-latest
+    steps:
       - name: Run pytest with coverage
         run: |
           pytest --cov=app --cov-report=xml:coverage.xml
 
+  upload_reports:
+    needs: [ linting, static_analysis, tests ]
+    runs-on: ubuntu-latest
+    steps:
       - name: Upload linting, static analysis, and security reports
         uses: actions/upload-artifact@v4
         with:
