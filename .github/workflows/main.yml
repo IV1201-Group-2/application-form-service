@@ -9,7 +9,7 @@ on:
       - '**'
 
 jobs:
-  setup:
+  linting:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -36,26 +36,68 @@ jobs:
       - name: Install development dependencies
         run: pip install -r requirements-dev.txt
 
-  linting:
-    needs: setup
-    runs-on: ubuntu-latest
-    steps:
       - name: Run PEP8 linting and generate report
         run: |
           flake8 app --output-file=flake8report.txt
 
   static_analysis:
-    needs: setup
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.9'
+
+      - name: Cache dependencies
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cache/pip
+            .mypy_cache
+          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt', '**/requirements-dev.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Install development dependencies
+        run: pip install -r requirements-dev.txt
+        
       - name: Run static analysis and generate report
         run: |
           mypy app --html-report mypy_report
 
   tests:
-    needs: setup
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.9'
+
+      - name: Cache dependencies
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cache/pip
+            .mypy_cache
+          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt', '**/requirements-dev.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Install development dependencies
+        run: pip install -r requirements-dev.txt
+
       - name: Run pytest with coverage
         run: |
           pytest --cov=app --cov-report=xml:coverage.xml
