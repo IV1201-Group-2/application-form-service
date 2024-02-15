@@ -2,6 +2,7 @@ import logging
 import os
 
 from flask import Flask
+from flask_cors import CORS
 
 from app import jwt_handlers
 from app.extensions import database, jwt
@@ -21,6 +22,8 @@ def create_app() -> Flask:
     application_form_api = Flask(__name__)
     application_form_api.config.from_pyfile('config.py')
 
+    CORS(application_form_api)
+
     setup_logging(application_form_api)
     setup_extensions(application_form_api)
     register_blueprints(application_form_api)
@@ -37,15 +40,15 @@ def setup_logging(application_form_api: Flask) -> None:
 
     log_dir = application_form_api.config.get('LOG_DIR', 'logs')
     os.makedirs(
-            log_dir, exist_ok=True)
+        log_dir, exist_ok=True)
 
     logging.basicConfig(
-            level=application_form_api.config.get('LOG_LEVEL', logging.INFO),
-            format=application_form_api.config.get(
-                    'LOG_FORMAT',
-                    '%(asctime)s - %(name)s - %(levelname)s - %(message)s'),
-            filename=application_form_api.config.get(
-                    'LOG_FILE', os.path.join(log_dir, 'app.log'))
+        level=application_form_api.config.get('LOG_LEVEL', logging.INFO),
+        format=application_form_api.config.get(
+            'LOG_FORMAT',
+            '%(asctime)s - %(name)s - %(levelname)s - %(message)s'),
+        filename=application_form_api.config.get(
+            'LOG_FILE', os.path.join(log_dir, 'app.log'))
     )
 
 
@@ -69,8 +72,8 @@ def register_blueprints(application_form_api: Flask) -> None:
     """
 
     application_form_api.register_blueprint(
-            personal_info_bp,
-            url_prefix='/api/application-form/applicant/personal-info')
+        personal_info_bp,
+        url_prefix='/api/application-form/applicant/personal-info')
     application_form_api.register_blueprint(
             applicant_competences_bp,
             url_prefix='/api/application-form/applicant/competences')
@@ -78,9 +81,11 @@ def register_blueprints(application_form_api: Flask) -> None:
             applicant_availabilities_bp,
             url_prefix='/api/application-form/applicant/availabilities')
     application_form_api.register_blueprint(
-            competences_bp, url_prefix='/api/application-form/competences')
+        competences_bp, url_prefix='/api/application-form/competences')
 
 
 if __name__ == "__main__":
     app = create_app()
     app.run(debug=True)
+
+application = create_app()
