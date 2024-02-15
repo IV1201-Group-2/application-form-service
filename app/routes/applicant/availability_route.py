@@ -1,5 +1,5 @@
 from flask import Blueprint, Response, jsonify, request
-from flask_jwt_extended import get_jwt_identity, jwt_required
+from flask_jwt_extended import jwt_required, get_jwt
 
 from app.services.applicant.availabilities_service import \
     store_applicant_availabilities
@@ -28,7 +28,7 @@ def add_applicant_availabilities() -> tuple[Response, int]:
         return jsonify({'error': 'INVALID_JSON_PAYLOAD'}), 400
 
     availabilities = request.json
-    current_user = get_jwt_identity().get('id')
+    current_user = get_jwt()['id']
 
     result = store_applicant_availabilities(current_user, availabilities)
 
