@@ -21,7 +21,7 @@ def get_personal_info() -> tuple[Response, int]:
     try:
         personal_info = fetch_personal_info(current_user)
         current_app.logger.info(
-            f'Responded with personal info for {current_user}.')
+            f'Responded with personal info for id: {current_user}.')
         return jsonify(personal_info), 200
     except NoResultFound:
         return jsonify({
