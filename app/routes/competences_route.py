@@ -13,7 +13,13 @@ def get_competences() -> tuple[Response, int]:
     """
     Gets the selectable competences.
 
-    :return: A tuple containing the response and the status code.
+    This function retrieves the selectable competences from the database. If
+    the competences are not found, it returns a 404 error. If there is an issue
+    with the database operation, it returns a 500 error.
+
+    :returns: A tuple containing the response and the status code.
+    :raises NoResultFound: If no competences are found in the database.
+    :raises SQLAlchemyError: If there is an issue with the database operation.
     """
 
     try:
@@ -21,10 +27,6 @@ def get_competences() -> tuple[Response, int]:
         current_app.logger.info('Responded with selectable competences.')
         return jsonify(competences), 200
     except NoResultFound:
-        return jsonify({
-            'error': 'COMPETENCES_NOT_FOUND',
-            'details': 'No competences found in the database'}), 404
+        return jsonify({'error': 'COMPETENCES_NOT_FOUND'}), 404
     except SQLAlchemyError:
-        return jsonify({
-            'error': 'COULD_NOT_FETCH_COMPETENCES',
-            'details': 'Could not fetch competences from database'}), 500
+        return jsonify({'error': 'COULD_NOT_FETCH_COMPETENCES'}), 500
