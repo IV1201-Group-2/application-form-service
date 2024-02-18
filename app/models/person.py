@@ -25,3 +25,19 @@ class Person(database.Model):  # type: ignore
     password = database.Column(database.String(255))
     role_id = database.Column(database.Integer)
     username = database.Column(database.String(255))
+
+    def to_dict(self) -> dict:
+        """
+        Convert the person to a dictionary.
+
+        :returns: A dictionary representation of the person.
+        """
+        return {
+            'id': self.person_id,
+            'name': self.name,
+            'surname': self.surname,
+            'pnr': self.pnr,
+            'email': self.email,
+            'username': self.username,
+            'role': self.role_id
+        }
