@@ -3,6 +3,7 @@ from tests.utilities.test_utilities import generate_token_for_person_id_1, \
     remove_application_components_from_db, remove_competences_from_db, \
     setup_competences_in_db
 
+
 def test_add_application_success(app_with_client):
     app, test_client = app_with_client
     setup_competences_in_db(app)
