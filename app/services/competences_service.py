@@ -1,30 +1,16 @@
-from sqlalchemy.exc import NoResultFound, SQLAlchemyError
-
-from app.models.competence import Competence
 from app.repositories.competences_repository import get_competences_from_db
 
 
-def fetch_competences() -> dict[int, str]:
+def fetch_competences() -> list[dict]:
     """
-    Fetches competences.
+    Fetches the competences.
 
-    :return: A dictionary containing the selectable competences.
-    """
+    This function fetches the competences from the database. It then
+    converts each competence into a dictionary and returns a list of these
+    dictionaries.
 
-    try:
-        competences = get_competences_from_db()
-        return __competences_to_dict(competences)
-    except (NoResultFound, SQLAlchemyError) as exception:
-        raise exception
-
-
-def __competences_to_dict(competences: list[Competence]) -> dict:
-    """
-    Converts a list of competences to a dictionary.
-
-    :param competences: A list of competences.
-    :return: A dictionary containing the competences.
+    :returns: A list of dictionaries, each representing a competence.
     """
 
-    return {competence.competence_id: competence.name
-            for competence in competences}
+    competences = get_competences_from_db()
+    return [competence.to_dict() for competence in competences]
