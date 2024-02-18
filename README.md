@@ -1,6 +1,7 @@
 # Application Form API
 
-This API is used by applicants to manage their application forms and personal information.
+This API is used by applicants to submit their application for a job. The API allows applicants to check their
+registered personal information as well as submit an application.
 
 ## Personal Info Endpoint
 
@@ -217,3 +218,42 @@ The provided JWT token has been revoked
 
 There was an issue with the database operation when trying to store the application
 
+## Deployment
+
+The application is designed to be deployed on Heroku. You can follow the steps below to deploy the application:
+
+1. Create a new Heroku application.
+2. Set the `DATABASE_URL` environment variable in the Heroku application settings to your PostgreSQL database URL.
+3. Push the application code to the Heroku application's Git repository.
+
+## Database Configuration
+
+The application uses PostgreSQL as its database. The database URL should be set in the `DATABASE_URL` environment
+variable.
+
+## Testing
+
+Tests are written using pytest. You can run the tests by executing the following command in the root directory of the
+project:
+
+```bash
+pytest
+```
+
+## Linting
+
+Flake8 is used for linting the code. You can run the linter by executing the following command in the root directory of
+the project:
+
+```bash
+flake8 --show-source app tests
+```
+
+## Static Analysis
+
+Mypy is used for static type checking. You can run the static type checker by executing the following command in the
+root directory of the project:
+
+```bash
+mypy app tests
+```
