@@ -27,7 +27,7 @@ def create_app() -> Flask:
     application_form_api.errorhandler(Exception)(
             handle_all_unhandled_exceptions)
 
-    CORS(application_form_api)
+    CORS(application_form_api, resources={r"/api/*": {"origins": "*"}})
 
     setup_logging(application_form_api)
     setup_extensions(application_form_api)
