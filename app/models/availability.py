@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from app.extensions import database
 
 
@@ -18,7 +20,8 @@ class Availability(database.Model):  # type: ignore
     from_date = database.Column(database.Date)
     to_date = database.Column(database.Date)
 
-    def __init__(self, person_id, from_date, to_date):
+    def __init__(self, person_id: int,
+                 from_date: datetime, to_date: datetime) -> None:
         """
         Initializes a new Availability object.
 
@@ -29,3 +32,14 @@ class Availability(database.Model):  # type: ignore
         self.person_id = person_id
         self.from_date = from_date
         self.to_date = to_date
+
+    def to_dict(self) -> dict:
+        """
+        Convert the availability to a dictionary.
+
+        :returns: A dictionary representation of the availability.
+        """
+        return {
+            'from_date': self.from_date.strftime('%Y-%m-%d'),
+            'to_date': self.to_date.strftime('%Y-%m-%d')
+        }
