@@ -3,56 +3,6 @@
 This API is used by applicants to submit their application for a job. The API allows applicants to check their
 registered personal information as well as submit an application.
 
-## Personal Info Endpoint
-
-`GET /api/application-form/applicant/personal-info`
-
-### Additional requirements
-
-* The user must be logged in when calling this API
-* The user's JWT token must be included in the `Authorization` header
-
-### Successful response
-
-The API returns an object with the following structure:
-
-```json
-{
-  "id": 0,
-  "first_name": "John",
-  "last_name": "Doe",
-  "email": "johndoe@example.com",
-  "phone_number": "1234567890",
-  "address": "123 Main St, Anytown, Anystate, 12345"
-}
-```
-
-### Error responses
-
-#### `USER_NOT_FOUND` (404 Not Found)
-
-No user was found with the ID specified in the JWT token
-
-#### `COULD_NOT_FETCH_USER` (500 Internal Server Error)
-
-There was an issue with the database operation when trying to fetch the user's information
-
-#### `UNAUTHORIZED` (401 Unauthorized)
-
-User is not logged in (JWT token was not provided or is invalid)
-
-#### `INVALID_TOKEN` (401 Unauthorized)
-
-The provided JWT token is invalid (e.g., it is expired, not yet valid, or does not contain the required claims)
-
-#### `TOKEN_NOT_PROVIDED` (401 Unauthorized)
-
-No JWT token was provided in the `Authorization` header
-
-#### `TOKEN_REVOKED` (401 Unauthorized)
-
-The provided JWT token has been revoked
-
 ## Get Competences Endpoint
 
 `GET /api/application-form/applicant/competences`
@@ -238,13 +188,13 @@ python -m venv env
 On Windows:
 
 ```bash
-env\Scripts\activate
+venv\Scripts\activate
 ```
 
 On Unix or MacOS:
 
 ```bash
-source env/bin/activate
+source venv/bin/activate
 ```
 
 3. Install the dependencies:
