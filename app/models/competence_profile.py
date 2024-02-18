@@ -20,7 +20,8 @@ class CompetenceProfile(database.Model):  # type: ignore
     years_of_experience = database.Column(
             database.Numeric(precision=4, scale=2))
 
-    def __init__(self, person_id, competence_id, years_of_experience):
+    def __init__(self, person_id: int, competence_id: int,
+                 years_of_experience: float) -> None:
         """
         Initializes a new CompetenceProfile object.
 
@@ -32,3 +33,14 @@ class CompetenceProfile(database.Model):  # type: ignore
         self.person_id = person_id
         self.competence_id = competence_id
         self.years_of_experience = years_of_experience
+
+    def to_dict(self) -> dict:
+        """
+        Convert the object to a dictionary.
+
+        :return: A dictionary representation of the object.
+        """
+        return {
+            'competence_id': self.competence_id,
+            'years_of_experience': self.years_of_experience
+        }
