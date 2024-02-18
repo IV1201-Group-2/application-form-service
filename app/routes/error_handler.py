@@ -1,5 +1,7 @@
 from flask import current_app, jsonify
 
+from app.utilities.status_codes import StatusCodes
+
 
 def handle_all_unhandled_exceptions(exception):
     """
@@ -14,4 +16,5 @@ def handle_all_unhandled_exceptions(exception):
     """
 
     current_app.logger.error(exception)
-    return jsonify({'error': 'INTERNAL_SERVER_ERROR'}), 500
+    return (jsonify({'error': 'INTERNAL_SERVER_ERROR'}),
+            StatusCodes.INTERNAL_SERVER_ERROR)

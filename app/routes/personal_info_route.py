@@ -3,6 +3,7 @@ from flask_jwt_extended import get_jwt, jwt_required
 from sqlalchemy.exc import NoResultFound, SQLAlchemyError
 
 from app.services.personal_info_service import fetch_personal_info
+from app.utilities.status_codes import StatusCodes
 
 personal_info_bp = Blueprint('personal-info', __name__)
 
@@ -28,8 +29,9 @@ def get_personal_info() -> tuple[Response, int]:
         personal_info = fetch_personal_info(person_id)
         current_app.logger.info(
                 f'Responded with personal info for id: {person_id}.')
-        return jsonify(personal_info), 200
+        return jsonify(personal_info), StatusCodes.OK
     except NoResultFound:
-        return jsonify({'error': 'USER_NOT_FOUND'}), 404
+        return jsonify({'error': 'USER_NOT_FOUND'}), StatusCodes.NOT_FOUND
     except SQLAlchemyError:
-        return jsonify({'error': 'COULD_NOT_FETCH_USER'}), 500
+        return (jsonify({'error': 'COULD_NOT_FETCH_USER'}),
+                StatusCodes.INTERNAL_SERVER_ERROR)

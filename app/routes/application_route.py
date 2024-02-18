@@ -8,6 +8,7 @@ from app.models.availability import Availability
 from app.models.competence_profile import CompetenceProfile
 from app.services.application_service import store_application
 from app.services.competences_service import fetch_competences
+from app.utilities.status_codes import StatusCodes
 
 application_submission_bp = Blueprint('application_submission', __name__)
 
@@ -34,7 +35,8 @@ def add_submitted_application() -> tuple[Response, int]:
 
     if (not request or request.content_type != 'application/json'
             or not request.json):
-        return jsonify({'error': 'INVALID_JSON_PAYLOAD'}), 400
+        return (jsonify({'error': 'INVALID_JSON_PAYLOAD'}),
+                StatusCodes.BAD_REQUEST)
 
     application = request.json
 
@@ -53,11 +55,11 @@ def add_submitted_application() -> tuple[Response, int]:
                 person_id, valid_competences, valid_availabilities)
 
     except (TypeError, KeyError, ValueError) as exception:
-        return jsonify(exception.args[0]), 400
+        return jsonify(exception.args[0]), StatusCodes.BAD_REQUEST
     except SQLAlchemyError as exception:
-        return jsonify(exception.args[0]), 500
+        return jsonify(exception.args[0]), StatusCodes.INTERNAL_SERVER_ERROR
 
-    return jsonify(application), 201
+    return jsonify(application), StatusCodes.CREATED
 
 
 def __validate_competences(

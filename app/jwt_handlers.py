@@ -2,6 +2,8 @@ from flask import current_app, jsonify
 from flask_jwt_extended import JWTManager
 from jwt import InvalidTokenError
 
+from app.utilities.status_codes import StatusCodes
+
 
 def register_jwt_handlers(jwt: JWTManager) -> None:
     """
@@ -28,7 +30,7 @@ def register_jwt_handlers(jwt: JWTManager) -> None:
         """
 
         current_app.logger.warning(f'Invalid JWT provided: {error}')
-        return jsonify({'error': 'INVALID_TOKEN', }), 401
+        return jsonify({'error': 'INVALID_TOKEN', }), StatusCodes.UNAUTHORIZED
 
     @jwt.expired_token_loader
     def expired_token_callback(header: dict, payload: dict) -> tuple:
@@ -45,7 +47,7 @@ def register_jwt_handlers(jwt: JWTManager) -> None:
         """
 
         current_app.logger.warning('Expired JWT token')
-        return jsonify({'error': 'TOKEN_EXPIRED'}), 401
+        return jsonify({'error': 'TOKEN_EXPIRED'}), StatusCodes.UNAUTHORIZED
 
     @jwt.unauthorized_loader
     def unauthorized_callback(error: str) -> tuple:
@@ -61,4 +63,4 @@ def register_jwt_handlers(jwt: JWTManager) -> None:
         """
 
         current_app.logger.warning(f'Unauthorized request: {error}')
-        return jsonify({'error': 'UNAUTHORIZED'}), 401
+        return jsonify({'error': 'UNAUTHORIZED'}), StatusCodes.UNAUTHORIZED

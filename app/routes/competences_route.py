@@ -3,6 +3,7 @@ from flask_jwt_extended import jwt_required
 from sqlalchemy.exc import NoResultFound, SQLAlchemyError
 
 from app.services.competences_service import fetch_competences
+from app.utilities.status_codes import StatusCodes
 
 competences_bp = Blueprint('competences', __name__)
 
@@ -25,8 +26,10 @@ def get_competences() -> tuple[Response, int]:
     try:
         competences = fetch_competences()
         current_app.logger.info('Responded with selectable competences.')
-        return jsonify(competences), 200
+        return jsonify(competences), StatusCodes.OK
     except NoResultFound:
-        return jsonify({'error': 'COMPETENCES_NOT_FOUND'}), 404
+        return jsonify(
+                {'error': 'COMPETENCES_NOT_FOUND'}), StatusCodes.NOT_FOUND
     except SQLAlchemyError:
-        return jsonify({'error': 'COULD_NOT_FETCH_COMPETENCES'}), 500
+        return (jsonify({'error': 'COULD_NOT_FETCH_COMPETENCES'}),
+                StatusCodes.INTERNAL_SERVER_ERROR)
