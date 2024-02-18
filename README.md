@@ -218,6 +218,50 @@ The provided JWT token has been revoked
 
 There was an issue with the database operation when trying to store the application
 
+## Installation
+
+This project uses pip for package management. The dependencies for the project are listed in the `requirements.txt`
+and `requirements-dev.txt` files.
+
+### Installing Dependencies
+
+To install the dependencies for this project, follow the steps below:
+
+1. Create a virtual environment (optional, but recommended):
+
+```bash
+python -m venv env
+```
+
+2. Activate the virtual environment:
+
+On Windows:
+
+```bash
+env\Scripts\activate
+```
+
+On Unix or MacOS:
+
+```bash
+source env/bin/activate
+```
+
+3. Install the dependencies:
+
+```bash
+pip install -r requirements.txt
+```
+
+### Installing Development Dependencies
+
+If you plan to contribute to the project, you should also install the development dependencies. After activating your
+virtual environment, run:
+
+```bash
+pip install -r requirements-dev.txt
+```
+
 ## Deployment
 
 The application is designed to be deployed on Heroku. You can follow the steps below to deploy the application:
