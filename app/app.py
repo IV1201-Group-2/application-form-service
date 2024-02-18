@@ -9,7 +9,6 @@ from app.extensions import database, jwt
 from app.routes.application_route import application_submission_bp
 from app.routes.competences_route import competences_bp
 from app.routes.error_handler import handle_all_unhandled_exceptions
-from app.routes.personal_info_route import personal_info_bp
 
 
 def create_app() -> Flask:
@@ -91,9 +90,6 @@ def register_blueprints(application_form_api: Flask) -> None:
     :param application_form_api: The Flask application.
     """
 
-    application_form_api.register_blueprint(
-            personal_info_bp,
-            url_prefix='/api/application-form/applicant/personal-info')
     application_form_api.register_blueprint(
             competences_bp,
             url_prefix='/api/application-form/competences')

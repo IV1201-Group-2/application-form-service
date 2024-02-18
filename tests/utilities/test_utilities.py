@@ -8,19 +8,6 @@ from app.models.application import ApplicationStatus
 from app.models.availability import Availability
 from app.models.competence import Competence
 from app.models.competence_profile import CompetenceProfile
-from app.models.person import Person
-
-
-def setup_test_user_1_in_db(app):
-    with app.app_context():
-        database.session.add(Person(name='test', surname='tester', role_id=2))
-        database.session.commit()
-
-
-def remove_test_user_1_from_db(app):
-    with app.app_context():
-        database.session.query(Person).filter(Person.person_id == 1).delete()
-        database.session.commit()
 
 
 def generate_token_for_person_id_1(app) -> tuple[str, str]:

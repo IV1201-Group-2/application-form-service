@@ -8,10 +8,8 @@ from app.models.availability import Availability
 from app.models.competence_profile import CompetenceProfile
 from app.repositories.application_repository import insert_application_in_db
 from tests.utilities.test_utilities import generate_application_status, \
-    generate_availabilities, \
-    generate_competences, \
-    remove_application_components_from_db, remove_competences_from_db, \
-    remove_test_user_1_from_db
+    generate_availabilities, generate_competences, \
+    remove_application_components_from_db, remove_competences_from_db
 
 
 def test_insert_application_in_db_success(app_with_client):
@@ -48,7 +46,6 @@ def test_insert_application_in_db_success(app_with_client):
         assert inserted_application_status[0].person_id == 1
         assert inserted_application_status[0].status == 'UNHANDLED'
 
-    remove_test_user_1_from_db(app)
     remove_competences_from_db(app)
     remove_application_components_from_db(app)
 
