@@ -18,12 +18,11 @@ The API returns a list of competences with the following structure:
 
 ```json
 [
-  {
-    "competence_id": 0,
-    "competence_name": "Python",
-    "years_of_experience": 5
-  },
-  ...
+    {
+        "competence_id": 0,
+        "i18n-key": "the-key"
+    },
+    ...
 ]
 ```
 
