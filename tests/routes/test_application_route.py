@@ -1,3 +1,4 @@
+from tests.utilities.test_status_codes import StatusCodes
 from tests.utilities.test_utilities import generate_token_for_person_id_1, \
     remove_application_components_from_db, remove_competences_from_db, \
     remove_test_user_1_from_db, \
@@ -20,7 +21,7 @@ def test_add_application_success(app_with_client):
                                 headers={'Authorization': f'Bearer {token}'},
                                 json=payload)
 
-    assert response.status_code == 201
+    assert response.status_code == StatusCodes.CREATED
     response_data = response.json
 
     assert 'competences' in response_data
@@ -45,7 +46,7 @@ def test_add_application_with_invalid_json(app_with_client):
                                 headers={'Authorization': f'Bearer {token}'},
                                 data="This is not JSON")
 
-    assert response.status_code == 400
+    assert response.status_code == StatusCodes.BAD_REQUEST
     assert response.json == {'error': 'INVALID_JSON_PAYLOAD'}
 
 
@@ -63,7 +64,7 @@ def test_add_application_missing_competences(app_with_client):
                                 headers={'Authorization': f'Bearer {token}'},
                                 json=payload)
 
-    assert response.status_code == 201
+    assert response.status_code == StatusCodes.CREATED
     assert response.json['competences'] == []
     assert response.json['availabilities'] == payload['availabilities']
     assert response.json['status'] == 'UNHANDLED'
@@ -87,7 +88,7 @@ def test_add_submitted_application_invalid_competence_type(app_with_client):
                                 headers={'Authorization': f'Bearer {token}'},
                                 json=payload)
 
-    assert response.status_code == 400
+    assert response.status_code == StatusCodes.BAD_REQUEST
     assert 'error' in response.json
     assert response.json['error'] == 'INVALID_PAYLOAD_STRUCTURE'
 
@@ -111,7 +112,7 @@ def test_add_submitted_application_missing_competence_id(app_with_client):
                                 headers={'Authorization': f'Bearer {token}'},
                                 json=payload)
 
-    assert response.status_code == 400
+    assert response.status_code == StatusCodes.BAD_REQUEST
     assert 'error' in response.json
     assert response.json['error'] == 'MISSING_COMPETENCE_ID'
 
@@ -136,7 +137,7 @@ def test_add_submitted_application_missing_years_of_experience(
                                 headers={'Authorization': f'Bearer {token}'},
                                 json=payload)
 
-    assert response.status_code == 400
+    assert response.status_code == StatusCodes.BAD_REQUEST
     assert 'error' in response.json
     assert response.json['error'] == 'MISSING_YEARS_OF_EXPERIENCE'
 
@@ -160,7 +161,7 @@ def test_add_submitted_application_invalid_competence_id(app_with_client):
                                 headers={'Authorization': f'Bearer {token}'},
                                 json=payload)
 
-    assert response.status_code == 400
+    assert response.status_code == StatusCodes.BAD_REQUEST
     assert 'error' in response.json
     assert response.json['error'] == 'INVALID_COMPETENCE_ID'
 
@@ -185,7 +186,7 @@ def test_add_submitted_application_invalid_years_of_experience(
                                 headers={'Authorization': f'Bearer {token}'},
                                 json=payload)
 
-    assert response.status_code == 400
+    assert response.status_code == StatusCodes.BAD_REQUEST
     assert 'error' in response.json
     assert response.json['error'] == 'INVALID_YEARS_OF_EXPERIENCE'
 
@@ -209,7 +210,7 @@ def test_add_submitted_application_invalid_availabilities_type(
                                 headers={'Authorization': f'Bearer {token}'},
                                 json=payload)
 
-    assert response.status_code == 400
+    assert response.status_code == StatusCodes.BAD_REQUEST
     assert 'error' in response.json
     assert response.json['error'] == 'INVALID_PAYLOAD_STRUCTURE'
 
@@ -232,7 +233,7 @@ def test_add_submitted_application_missing_availabilities(app_with_client):
                                 headers={'Authorization': f'Bearer {token}'},
                                 json=payload)
 
-    assert response.status_code == 400
+    assert response.status_code == StatusCodes.BAD_REQUEST
     assert 'error' in response.json
     assert response.json['error'] == 'MISSING_AVAILABILITIES'
 
@@ -255,7 +256,7 @@ def test_add_submitted_application_invalid_availability_type(app_with_client):
                                 headers={'Authorization': f'Bearer {token}'},
                                 json=payload)
 
-    assert response.status_code == 400
+    assert response.status_code == StatusCodes.BAD_REQUEST
     assert 'error' in response.json
     assert response.json['error'] == 'INVALID_AVAILABILITY'
 
@@ -278,7 +279,7 @@ def test_add_submitted_application_missing_from_date(app_with_client):
                                 headers={'Authorization': f'Bearer {token}'},
                                 json=payload)
 
-    assert response.status_code == 400
+    assert response.status_code == StatusCodes.BAD_REQUEST
     assert 'error' in response.json
     assert response.json['error'] == 'MISSING_FROM_DATE'
 
@@ -301,7 +302,7 @@ def test_add_submitted_application_missing_to_date(app_with_client):
                                 headers={'Authorization': f'Bearer {token}'},
                                 json=payload)
 
-    assert response.status_code == 400
+    assert response.status_code == StatusCodes.BAD_REQUEST
     assert 'error' in response.json
     assert response.json['error'] == 'MISSING_TO_DATE'
 
@@ -325,7 +326,7 @@ def test_add_submitted_application_invalid_date_format(app_with_client):
                                 headers={'Authorization': f'Bearer {token}'},
                                 json=payload)
 
-    assert response.status_code == 400
+    assert response.status_code == StatusCodes.BAD_REQUEST
     assert 'error' in response.json
     assert response.json['error'] == 'INVALID_DATE_FORMAT'
 
@@ -349,7 +350,7 @@ def test_add_submitted_application_invalid_date_range(app_with_client):
                                 headers={'Authorization': f'Bearer {token}'},
                                 json=payload)
 
-    assert response.status_code == 400
+    assert response.status_code == StatusCodes.BAD_REQUEST
     assert 'error' in response.json
     assert response.json['error'] == 'INVALID_DATE_RANGE'
 

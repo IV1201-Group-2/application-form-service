@@ -2,6 +2,7 @@ import datetime
 
 from flask_jwt_extended import create_access_token
 
+from tests.utilities.test_status_codes import StatusCodes
 from tests.utilities.test_utilities import generate_token_for_person_id_1, \
     remove_test_user_1_from_db, setup_test_user_1_in_db
 
@@ -15,7 +16,7 @@ def test_valid_token(app_with_client):
             '/api/application-form/applicant/personal-info/',
             headers={
                 'Authorization': f'Bearer {valid_token}'})
-    assert response.status_code == 200
+    assert response.status_code == StatusCodes.OK
     remove_test_user_1_from_db(app)
 
 
@@ -29,7 +30,7 @@ def test_invalid_token(app_with_client):
             '/api/application-form/applicant/personal-info/',
             headers={
                 'Authorization': f'Bearer {invalid_token}'})
-    assert response.status_code == 401
+    assert response.status_code == StatusCodes.UNAUTHORIZED
     assert response.json['error'] == 'INVALID_TOKEN'
 
 
@@ -47,7 +48,7 @@ def test_expired_token(app_with_client):
             '/api/application-form/applicant/personal-info/',
             headers={
                 'Authorization': f'Bearer {expired_token}'})
-    assert response.status_code == 401
+    assert response.status_code == StatusCodes.UNAUTHORIZED
     assert response.json['error'] == 'TOKEN_EXPIRED'
     remove_test_user_1_from_db(app)
 
@@ -56,5 +57,5 @@ def test_unauthorized_request(app_with_client):
     app, test_client = app_with_client
     response = test_client.get(
             '/api/application-form/applicant/personal-info/')
-    assert response.status_code == 401
+    assert response.status_code == StatusCodes.UNAUTHORIZED
     assert response.json['error'] == 'UNAUTHORIZED'
