@@ -16,8 +16,8 @@ def test_get_competences_success(app_with_client):
             '/api/application-form/competences/',
             headers={'Authorization': f'Bearer {token}'})
     assert response.status_code == StatusCodes.OK
-    assert response.json == [{'competence_id': 1, 'i18n-key': 'tester'},
-                             {'competence_id': 2, 'i18n-key': 'developer'}]
+    assert response.json == [{'competence_id': 1, 'i18n_key': 'tester'},
+                             {'competence_id': 2, 'i18n_key': 'developer'}]
 
     remove_competences_from_db(app)
 

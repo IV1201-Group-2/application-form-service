@@ -20,7 +20,7 @@ The API returns a list of competences with the following structure:
 [
     {
         "competence_id": 0,
-        "i18n-key": "the-key"
+        "i18n_key": "the-key"
     },
     ...
 ]

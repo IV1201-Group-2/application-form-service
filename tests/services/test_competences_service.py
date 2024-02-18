@@ -13,8 +13,8 @@ def test_fetch_competences_success(app_with_client):
     setup_competences_in_db(app)
     with app.app_context():
         result = fetch_competences()
-        assert result == [{'competence_id': 1, 'i18n-key': 'tester'},
-                          {'competence_id': 2, 'i18n-key': 'developer'}]
+        assert result == [{'competence_id': 1, 'i18n_key': 'tester'},
+                          {'competence_id': 2, 'i18n_key': 'developer'}]
 
     remove_competences_from_db(app)
 

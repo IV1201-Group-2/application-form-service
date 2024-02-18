@@ -12,7 +12,7 @@ class Competence(database.Model):  # type: ignore
     __tablename__ = 'competence'
 
     competence_id = database.Column(database.Integer, primary_key=True)
-    i18n_key = database.Column(database.String(255), name='i18n-key')
+    i18n_key = database.Column(database.String(255), name='i18n_key')
 
     def to_dict(self) -> dict:
         """
@@ -22,5 +22,5 @@ class Competence(database.Model):  # type: ignore
         """
         return {
             'competence_id': self.competence_id,
-            'i18n-key': self.i18n_key
+            'i18n_key': self.i18n_key
         }
