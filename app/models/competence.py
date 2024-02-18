@@ -6,13 +6,13 @@ class Competence(database.Model):  # type: ignore
     Represents a competence in the database.
 
     :ivar competence_id: The ID of the competence.
-    :ivar name: The name of the competence.
+    :ivar i18n_key: The i18n key of the competence.
     """
 
     __tablename__ = 'competence'
 
     competence_id = database.Column(database.Integer, primary_key=True)
-    name = database.Column(database.String(255))
+    i18n_key = database.Column(database.String(255), name='i18n-key')
 
     def to_dict(self) -> dict:
         """
@@ -22,5 +22,5 @@ class Competence(database.Model):  # type: ignore
         """
         return {
             'competence_id': self.competence_id,
-            'name': self.name
+            'i18n-key': self.i18n_key
         }

@@ -19,8 +19,8 @@ def generate_token_for_person_id_1(app) -> tuple[str, str]:
 
 def setup_competences_in_db(app):
     with app.app_context():
-        database.session.add(Competence(name='tester'))
-        database.session.add(Competence(name='developer'))
+        database.session.add(Competence(i18n_key='tester'))
+        database.session.add(Competence(i18n_key='developer'))
         database.session.commit()
 
 

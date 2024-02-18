@@ -14,9 +14,9 @@ def test_get_competences_from_db_success(app_with_client):
     with app.app_context():
         competences = get_competences_from_db()
         assert competences[0].competence_id == 1
-        assert competences[0].name == 'tester'
+        assert competences[0].i18n_key == 'tester'
         assert competences[1].competence_id == 2
-        assert competences[1].name == 'developer'
+        assert competences[1].i18n_key == 'developer'
 
     remove_competences_from_db(app)
 
