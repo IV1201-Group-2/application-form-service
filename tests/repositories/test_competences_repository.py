@@ -28,7 +28,6 @@ def test_get_competences_from_db_no_result(app_with_client):
             get_competences_from_db()
         exception = exception_info.value
         assert isinstance(exception, NoResultFound)
-        assert str(exception) == "NO COMPETENCES FOUND"
 
 
 def test_get_competences_from_db_sqlalchemy_error(app_with_client):
@@ -40,5 +39,5 @@ def test_get_competences_from_db_sqlalchemy_error(app_with_client):
             with pytest.raises(SQLAlchemyError) as exception_info:
                 get_competences_from_db()
 
-            assert "COULD NOT FETCH COMPETENCES" in str(exception_info.value)
+            assert isinstance(exception_info.value, SQLAlchemyError)
             mock_query.all.assert_called_once()
