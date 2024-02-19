@@ -35,6 +35,28 @@ def insert_application_in_db(
     database.session.commit()
 
 
+def get_application_status_from_db(person_id: int) -> ApplicationStatus:
+    """
+    Get application status from the database.
+
+    This function retrieves the application status of a person from the
+    database.
+
+    :param person_id: The ID of the person to retrieve the application status
+    for.
+    :returns: The ApplicationStatus object representing the application status
+    of the person.
+    :raises SQLAlchemyError: If there is an issue with the database operation,
+    an SQLAlchemyError is raised.
+    """
+
+    try:
+        return ApplicationStatus.query.filter_by(person_id=person_id).first()
+    except SQLAlchemyError as exception:
+        current_app.logger.error(exception)
+        raise SQLAlchemyError
+
+
 def __insert_availabilities_in_db(availabilities: list[Availability]) -> None:
     """
     Insert applicant availability into the database.
