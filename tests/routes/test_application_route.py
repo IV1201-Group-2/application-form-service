@@ -1,8 +1,8 @@
 from tests.utilities.test_status_codes import StatusCodes
 from tests.utilities.test_utilities import application_route_post_request, \
     generate_token_for_person_id_1, \
-    remove_application_components_from_db, remove_competences_from_db, \
-    setup_competences_in_db
+    generate_token_for_recruiter, remove_application_components_from_db, \
+    remove_competences_from_db, setup_competences_in_db
 
 
 def test_add_application_success(app_with_client):
@@ -31,6 +31,18 @@ def test_add_application_success(app_with_client):
 
     remove_competences_from_db(app)
     remove_application_components_from_db(app)
+
+
+def test_add_application_unauthorized_role(app_with_client):
+    app, test_client = app_with_client
+    token = generate_token_for_recruiter(app)
+
+    response = test_client.post('/api/application-form/submit/',
+                                headers={'Authorization': f'Bearer {token}'},
+                                json={})
+
+    assert response.status_code == StatusCodes.UNAUTHORIZED
+    assert response.json == {'error': 'UNAUTHORIZED_ROLE'}
 
 
 def test_add_application_with_invalid_json(app_with_client):
