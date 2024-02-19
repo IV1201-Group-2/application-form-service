@@ -13,7 +13,14 @@ from app.models.competence_profile import CompetenceProfile
 def generate_token_for_person_id_1(app) -> tuple[str, str]:
     with app.app_context():
         return create_access_token(identity=None,
-                                   additional_claims={'id': 1},
+                                   additional_claims={'id': 1, 'role': 2},
+                                   expires_delta=dt.timedelta(days=1))
+
+
+def generate_token_for_recruiter(app) -> tuple[str, str]:
+    with app.app_context():
+        return create_access_token(identity=None,
+                                   additional_claims={'id': 1, 'role': 1},
                                    expires_delta=dt.timedelta(days=1))
 
 
