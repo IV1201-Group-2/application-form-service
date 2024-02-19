@@ -201,7 +201,7 @@ def __validate_availability(person_id: int,
     except ValueError:
         raise ValueError({'error': 'INVALID_DATE_FORMAT'})
 
-    if from_date >= to_date:
+    if from_date > to_date:
         raise ValueError({'error': 'INVALID_DATE_RANGE'})
 
     return Availability(person_id, from_date, to_date)
