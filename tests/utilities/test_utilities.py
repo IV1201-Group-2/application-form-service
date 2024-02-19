@@ -56,3 +56,15 @@ def remove_application_components_from_db(app):
         Availability.query.delete()
         CompetenceProfile.query.delete()
         database.session.commit()
+
+
+def application_route_post_request(test_client, token, payload):
+    return test_client.post('/api/application-form/submit/',
+                            headers={'Authorization': f'Bearer {token}'},
+                            json=payload)
+
+
+def add_application_status_for_user_1(app):
+    with app.app_context():
+        database.session.add(ApplicationStatus(person_id=1))
+        database.session.commit()
