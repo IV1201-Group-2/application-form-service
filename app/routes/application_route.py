@@ -6,7 +6,7 @@ from sqlalchemy.exc import SQLAlchemyError
 
 from app.models.availability import Availability
 from app.models.competence_profile import CompetenceProfile
-from app.services.application_service import store_application
+from app.services.application_service import already_applied, store_application
 from app.services.competences_service import fetch_competences
 from app.utilities.status_codes import StatusCodes
 
@@ -24,11 +24,6 @@ def add_submitted_application() -> tuple[Response, int]:
     the application in the database.
 
     :returns: A tuple containing a Response object and an HTTP status code.
-    :raises TypeError: If the payload structure is invalid.
-    :raises KeyError: If a required key is missing from the payload.
-    :raises ValueError: If a value in the payload is invalid.
-    :raises SQLAlchemyError: If there is an issue with any of the database
-                             operations.
     """
 
     person_id = get_jwt()['id']
@@ -37,6 +32,10 @@ def add_submitted_application() -> tuple[Response, int]:
             or not request.json):
         return (jsonify({'error': 'INVALID_JSON_PAYLOAD'}),
                 StatusCodes.BAD_REQUEST)
+
+    if already_applied(person_id):
+        return (jsonify({'error': 'ALREADY_APPLIED_BEFORE'}),
+                StatusCodes.CONFLICT)
 
     application = request.json
 
