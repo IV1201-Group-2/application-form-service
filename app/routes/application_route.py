@@ -28,6 +28,11 @@ def add_submitted_application() -> tuple[Response, int]:
 
     person_id = get_jwt()['id']
 
+    role = get_jwt()['role']
+    if role != 2:
+        return (jsonify({'error': 'UNAUTHORIZED_ROLE'}),
+                StatusCodes.UNAUTHORIZED)
+
     if (not request or request.content_type != 'application/json'
             or not request.json):
         return (jsonify({'error': 'INVALID_JSON_PAYLOAD'}),
