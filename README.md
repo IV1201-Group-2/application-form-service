@@ -53,6 +53,8 @@ The provided JWT token has been revoked
 * The user must be logged in when calling this API
 * The user's JWT token must be included in the `Authorization` header
 * The request body must contain a JSON object with the following structure:
+* The user may only submit one application
+* Only users with the role `applicant` are allowed to submit an application
 
 ```json
 {
@@ -99,6 +101,10 @@ The API returns a JSON object with the following structure:
 
 ### Error responses
 
+#### `UNAUTHORIZED_ROLE` (401 Unauthorized)
+
+The user does not have the role `applicant`
+
 #### `INVALID_JSON_PAYLOAD` (400 Bad Request)
 
 The request body is not a valid JSON object
@@ -106,6 +112,10 @@ The request body is not a valid JSON object
 #### `INVALID_PAYLOAD_STRUCTURE` (400 Bad Request)
 
 The structure of the JSON object in the request body is invalid
+
+#### `ALREADY_APPLIED_BEFORE` (409 Conflict)
+
+The user has already submitted an application
 
 #### `MISSING_COMPETENCE_ID` (400 Bad Request)
 
