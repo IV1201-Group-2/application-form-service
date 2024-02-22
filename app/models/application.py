@@ -24,7 +24,7 @@ class ApplicationStatus(database.Model):  # type: ignore
         """
 
         self.person_id = person_id
-        self.status = 'UNHANDLED'
+        self.status = 'Pending'
 
     def to_dict(self) -> dict:
         """

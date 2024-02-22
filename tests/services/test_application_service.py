@@ -17,7 +17,7 @@ def test_insert_application_in_db_success(app_with_client):
     with app.app_context():
         application = store_application(person_id, competences, availabilities)
 
-        assert application['status'] == 'UNHANDLED'
+        assert application['status'] == 'Pending'
         assert len(application['competences']) == 2
         assert application['competences'][0]['competence_id'] == 1
         assert len(application['availabilities']) == 2

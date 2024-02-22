@@ -90,7 +90,7 @@ def test_add_application_missing_competences(app_with_client):
     assert response.status_code == StatusCodes.CREATED
     assert response.json['competences'] == []
     assert response.json['availabilities'] == payload['availabilities']
-    assert response.json['status'] == 'UNHANDLED'
+    assert response.json['status'] == 'Pending'
 
     remove_application_components_from_db(app)
 

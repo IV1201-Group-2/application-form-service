@@ -46,7 +46,7 @@ def test_insert_application_in_db_success(app_with_client):
 
         inserted_application_status = ApplicationStatus.query.all()
         assert inserted_application_status[0].person_id == 1
-        assert inserted_application_status[0].status == 'UNHANDLED'
+        assert inserted_application_status[0].status == 'Pending'
 
     remove_competences_from_db(app)
     remove_application_components_from_db(app)
@@ -87,7 +87,7 @@ def test_get_application_status_from_db_success(app_with_client):
     with app.app_context():
         application_status = get_application_status_from_db(person_id)
         assert application_status.person_id == 1
-        assert application_status.status == 'UNHANDLED'
+        assert application_status.status == 'Pending'
 
     remove_application_components_from_db(app)
 
