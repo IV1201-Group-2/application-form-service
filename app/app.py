@@ -41,25 +41,33 @@ def setup_logging(application_form_api: Flask) -> None:
     """
     Sets up logging for the Flask application.
 
-    This function sets up logging for the Flask application. It creates a
-    directory for log files if it doesn't exist, and configures the logging
-    module to write logs to a file with a specified format and level.
+    This function sets up logging for the Flask application. If LOG_TO_STDOUT
+    is enabled in the configuration, it sets up logging to stdout. Otherwise,
+    it configures logging to a file.
 
     :param application_form_api: The Flask application.
     """
 
-    log_dir = application_form_api.config.get('LOG_DIR', 'logs')
-    os.makedirs(
-            log_dir, exist_ok=True)
+    log_level = application_form_api.config.get('LOG_LEVEL', 'INFO').upper()
+    log_format = application_form_api.config.get(
+            'LOG_FORMAT',
+            '%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 
-    logging.basicConfig(
-            level=application_form_api.config.get('LOG_LEVEL', logging.INFO),
-            format=application_form_api.config.get(
-                    'LOG_FORMAT',
-                    '%(asctime)s - %(name)s - %(levelname)s - %(message)s'),
-            filename=application_form_api.config.get(
-                    'LOG_FILE', os.path.join(log_dir, 'app.log'))
-    )
+    if application_form_api.config.get('LOG_TO_STDOUT'):
+        stream_handler = logging.StreamHandler()
+        stream_handler.setLevel(log_level)
+        stream_handler.setFormatter(logging.Formatter(log_format))
+        logging.getLogger().addHandler(stream_handler)
+    else:
+        log_dir = application_form_api.config.get('LOG_DIR', 'logs')
+        os.makedirs(log_dir, exist_ok=True)
+        file_handler = logging.FileHandler(application_form_api.config.get(
+                'LOG_FILE', os.path.join(log_dir, 'app.log')))
+        file_handler.setLevel(log_level)
+        file_handler.setFormatter(logging.Formatter(log_format))
+        logging.getLogger().addHandler(file_handler)
+
+    logging.getLogger().setLevel(log_level)
 
 
 def setup_extensions(application_form_api: Flask) -> None:
