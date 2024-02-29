@@ -1,3 +1,4 @@
+import logging
 from datetime import datetime
 
 from flask import Blueprint, Response, jsonify, request
@@ -27,18 +28,23 @@ def add_submitted_application() -> tuple[Response, int]:
     """
 
     person_id = get_jwt()['id']
+    requester_ip = request.remote_addr
 
     role = get_jwt()['role']
     if role != 2:
+        logging.warning(f'{requester_ip} - Unauthorized person: {person_id}')
         return (jsonify({'error': 'UNAUTHORIZED_ROLE'}),
                 StatusCodes.UNAUTHORIZED)
 
     if (not request or request.content_type != 'application/json'
             or not request.json):
+        logging.warning(f'{requester_ip} - Invalid JSON payload')
         return (jsonify({'error': 'INVALID_JSON_PAYLOAD'}),
                 StatusCodes.BAD_REQUEST)
 
     if already_applied(person_id):
+        logging.warning(f'{requester_ip} - Person already applied: '
+                        f'{person_id}')
         return (jsonify({'error': 'ALREADY_APPLIED_BEFORE'}),
                 StatusCodes.CONFLICT)
 
@@ -59,10 +65,14 @@ def add_submitted_application() -> tuple[Response, int]:
                 person_id, valid_competences, valid_availabilities)
 
     except (TypeError, KeyError, ValueError) as exception:
+        logging.warning(f'{requester_ip} - {exception.args[0]}')
         return jsonify(exception.args[0]), StatusCodes.BAD_REQUEST
     except SQLAlchemyError as exception:
+        logging.error(f'{requester_ip} - {exception.args[0]}')
         return jsonify(exception.args[0]), StatusCodes.INTERNAL_SERVER_ERROR
 
+    logging.info(f'{requester_ip} - Application submitted for person: '
+                 f'{person_id}')
     return jsonify(application), StatusCodes.CREATED
 
 
