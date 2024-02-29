@@ -1,4 +1,6 @@
-from flask import Blueprint, Response, current_app, jsonify
+import logging
+
+from flask import Blueprint, Response, request, jsonify
 from flask_jwt_extended import jwt_required
 from sqlalchemy.exc import NoResultFound, SQLAlchemyError
 
@@ -23,13 +25,17 @@ def get_competences() -> tuple[Response, int]:
     :raises SQLAlchemyError: If there is an issue with the database operation.
     """
 
+    requester_ip = request.remote_addr
+
     try:
         competences = fetch_competences()
-        current_app.logger.info('Responded with selectable competences.')
+        logging.info(f'{requester_ip} - Responded with competences.')
         return jsonify(competences), StatusCodes.OK
     except NoResultFound:
+        logging.error(f'{requester_ip} - No competences found.')
         return jsonify(
                 {'error': 'COMPETENCES_NOT_FOUND'}), StatusCodes.NOT_FOUND
     except SQLAlchemyError:
+        logging.error(f'{requester_ip} - Could not fetch competences.')
         return (jsonify({'error': 'COULD_NOT_FETCH_COMPETENCES'}),
                 StatusCodes.INTERNAL_SERVER_ERROR)
