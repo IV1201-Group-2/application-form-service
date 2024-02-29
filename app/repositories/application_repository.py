@@ -1,4 +1,5 @@
-from flask import current_app
+import logging
+
 from sqlalchemy.exc import SQLAlchemyError
 
 from app.extensions import database
@@ -53,7 +54,7 @@ def get_application_status_from_db(person_id: int) -> ApplicationStatus:
     try:
         return ApplicationStatus.query.filter_by(person_id=person_id).first()
     except SQLAlchemyError as exception:
-        current_app.logger.error(exception)
+        logging.debug(str(exception), exc_info=True)
         raise SQLAlchemyError
 
 
@@ -75,7 +76,7 @@ def __insert_availabilities_in_db(availabilities: list[Availability]) -> None:
         database.session.add_all(availabilities)
     except SQLAlchemyError as exception:
         database.session.rollback()
-        current_app.logger.error(exception)
+        logging.debug(str(exception), exc_info=True)
         raise SQLAlchemyError
 
 
@@ -97,7 +98,7 @@ def __insert_competences_in_db(
         database.session.add_all(competences)
     except SQLAlchemyError as exception:
         database.session.rollback()
-        current_app.logger.error(exception)
+        logging.debug(str(exception), exc_info=True)
         raise SQLAlchemyError
 
 
@@ -119,5 +120,5 @@ def __insert_application_status_in_db(
         database.session.add(application_status)
     except SQLAlchemyError as exception:
         database.session.rollback()
-        current_app.logger.error(exception)
+        logging.debug(str(exception), exc_info=True)
         raise SQLAlchemyError

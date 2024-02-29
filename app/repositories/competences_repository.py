@@ -1,4 +1,5 @@
-from flask import current_app
+import logging
+
 from sqlalchemy.exc import NoResultFound, SQLAlchemyError
 
 from app.models.competence import Competence
@@ -20,10 +21,10 @@ def get_competences_from_db() -> list[Competence]:
     try:
         competences = Competence.query.all()
     except SQLAlchemyError as exception:
-        current_app.logger.error(exception)
+        logging.debug(str(exception), exc_info=True)
         raise SQLAlchemyError
 
     if not competences:
-        current_app.logger.error(NoResultFound('NO COMPETENCES FOUND'))
+        logging.debug(NoResultFound('NO COMPETENCES FOUND'))
         raise NoResultFound
     return competences
