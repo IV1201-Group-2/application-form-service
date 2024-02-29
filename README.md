@@ -1,262 +1,83 @@
-# Application Form API
+# Application Form Service
+This API is used by applicants to submit their application for a job. It is a microservice that is part of a recruitment application.
+## General Information
+- **Programming Language**: Python
+- **Virtual Environment**: Python venv
+- **Framework**: Flask
+- **Application Modularity**: Flask Blueprints 
+- **API Design**: RESTful principles
+- **Configuration Management**: Externalized to config.py
+- **Security**: Flask-JWT-Extended (authentication & authorization)
+- **CORS**: Flask-Cors
+- **Logging**: Flask-Logging + Root Logger
+- **Database Integration**: Flask-SQLAlchemy
+- **Database**: PostgreSQL
+- **Testing**: Pytest
+- **Code Coverage**: pytest-cov
+- **Linting**: flake8
+- **Dependency Management**: Pip
+- **Continuous Integration**: GitHub Actions
+- **Continuous Deployment**: Heroku
 
-This API is used by applicants to submit their application for a job. The API allows applicants to check their
-registered personal information as well as submit an application.
+## Project Setup
+Ensure all commands are executed from the project root.
 
-## Get Competences Endpoint
+1. **Environment Setup**: Create and activate a virtual environment.
+    ```bash
+    python3 -m venv venv
+    source venv/bin/activate
+    ```
 
-`GET /api/application-form/applicant/competences`
+2. **Install Dependencies**: Install all required dependencies.
+    ```bash
+    pip install -r requirements.txt
+    pip install -r requirements-dev.txt
+    ```
 
-### Additional requirements
+3. **Run Tests**: Execute all tests.
+    ```bash
+    pytest
+    ```
 
-* The user must be logged in when calling this API
-* The user's JWT token must be included in the `Authorization` header
+4. **Code Coverage**: Generate code coverage report.
+    ```bash
+    pytest --cov=app
+    ```
 
-### Successful response
+5. **Linting**: Run linting checks.
+    ```bash
+   flake8 --show-source --statistics app tests
+    ```
 
-The API returns a list of competences with the following structure:
+6. **Environment Variables**:
+   - Setup as specified in config.py.
 
-```json
-[
-    {
-        "competence_id": 0,
-        "i18n_key": "the-key"
-    },
-    ...
-]
+
+7. **Run Development Server**: Start the development server.
+    ```bash
+    flask --app app/app run
+    ```
+
+8. **Run Heroku Locally**: Run the application locally using Heroku.
+    ```bash
+    heroku local
+    ```
+
+## Directory Structure
+
 ```
-
-### Error responses
-
-#### `UNAUTHORIZED` (401 Unauthorized)
-
-User is not logged in (JWT token was not provided or is invalid)
-
-#### `INVALID_TOKEN` (401 Unauthorized)
-
-The provided JWT token is invalid (e.g., it is expired, not yet valid, or does not contain the required claims)
-
-#### `TOKEN_NOT_PROVIDED` (401 Unauthorized)
-
-No JWT token was provided in the `Authorization` header
-
-#### `TOKEN_REVOKED` (401 Unauthorized)
-
-The provided JWT token has been revoked
-
-## Add Submitted Application Endpoint
-
-`POST /api/application-form/applicant/submit-application`
-
-### Additional requirements
-
-* The user must be logged in when calling this API
-* The user's JWT token must be included in the `Authorization` header
-* The request body must contain a JSON object with the following structure:
-* The user may only submit one application
-* Only users with the role `applicant` are allowed to submit an application
-
-```json
-{
-  "competences": [
-    {
-      "competence_id": 0,
-      "years_of_experience": 5
-    },
-    ...
-  ],
-  "availabilities": [
-    {
-      "from_date": "2023-01-01",
-      "to_date": "2023-12-31"
-    },
-    ...
-  ]
-}
-```
-
-### Successful response
-
-The API returns a JSON object with the following structure:
-
-```json
-{
-  "status": "application_status",
-  "competences": [
-    {
-      "competence_id": 0,
-      "years_of_experience": 5
-    },
-    ...
-  ],
-  "availabilities": [
-    {
-      "from_date": "2023-01-01",
-      "to_date": "2023-12-31"
-    },
-    ...
-  ]
-}
-```
-
-### Error responses
-
-#### `UNAUTHORIZED_ROLE` (401 Unauthorized)
-
-The user does not have the role `applicant`
-
-#### `INVALID_JSON_PAYLOAD` (400 Bad Request)
-
-The request body is not a valid JSON object
-
-#### `INVALID_PAYLOAD_STRUCTURE` (400 Bad Request)
-
-The structure of the JSON object in the request body is invalid
-
-#### `ALREADY_APPLIED_BEFORE` (409 Conflict)
-
-The user has already submitted an application
-
-#### `MISSING_COMPETENCE_ID` (400 Bad Request)
-
-A competence in the request body does not have a `competence_id` key
-
-#### `MISSING_YEARS_OF_EXPERIENCE` (400 Bad Request)
-
-A competence in the request body does not have a `years_of_experience` key
-
-#### `INVALID_COMPETENCE_ID` (400 Bad Request)
-
-A competence in the request body has an invalid `competence_id` value
-
-#### `INVALID_YEARS_OF_EXPERIENCE` (400 Bad Request)
-
-A competence in the request body has an invalid `years_of_experience` value
-
-#### `MISSING_AVAILABILITIES` (400 Bad Request)
-
-The request body does not have an `availabilities` key
-
-#### `INVALID_AVAILABILITY` (400 Bad Request)
-
-An availability in the request body is not a valid JSON object
-
-#### `MISSING_FROM_DATE` (400 Bad Request)
-
-An availability in the request body does not have a `from_date` key
-
-#### `MISSING_TO_DATE` (400 Bad Request)
-
-An availability in the request body does not have a `to_date` key
-
-#### `INVALID_DATE_FORMAT` (400 Bad Request)
-
-An availability in the request body has an invalid date format
-
-#### `INVALID_DATE_RANGE` (400 Bad Request)
-
-An availability in the request body has an invalid date range
-
-#### `UNAUTHORIZED` (401 Unauthorized)
-
-User is not logged in (JWT token was not provided or is invalid)
-
-#### `INVALID_TOKEN` (401 Unauthorized)
-
-The provided JWT token is invalid (e.g., it is expired, not yet valid, or does not contain the required claims)
-
-#### `TOKEN_NOT_PROVIDED` (401 Unauthorized)
-
-No JWT token was provided in the `Authorization` header
-
-#### `TOKEN_REVOKED` (401 Unauthorized)
-
-The provided JWT token has been revoked
-
-#### `INTERNAL_SERVER_ERROR` (500 Internal Server Error)
-
-There was an issue with the database operation when trying to store the application
-
-## Installation
-
-This project uses pip for package management. The dependencies for the project are listed in the `requirements.txt`
-and `requirements-dev.txt` files.
-
-### Installing Dependencies
-
-To install the dependencies for this project, follow the steps below:
-
-1. Create a virtual environment (optional, but recommended):
-
-```bash
-python -m venv env
-```
-
-2. Activate the virtual environment:
-
-On Windows:
-
-```bash
-venv\Scripts\activate
-```
-
-On Unix or MacOS:
-
-```bash
-source venv/bin/activate
-```
-
-3. Install the dependencies:
-
-```bash
-pip install -r requirements.txt
-```
-
-### Installing Development Dependencies
-
-If you plan to contribute to the project, you should also install the development dependencies. After activating your
-virtual environment, run:
-
-```bash
-pip install -r requirements-dev.txt
-```
-
-## Deployment
-
-The application is designed to be deployed on Heroku. You can follow the steps below to deploy the application:
-
-1. Create a new Heroku application.
-2. Set the `DATABASE_URL` environment variable in the Heroku application settings to your PostgreSQL database URL.
-3. Push the application code to the Heroku application's Git repository.
-
-## Database Configuration
-
-The application uses PostgreSQL as its database. The database URL should be set in the `DATABASE_URL` environment
-variable.
-
-## Testing
-
-Tests are written using pytest. You can run the tests by executing the following command in the root directory of the
-project:
-
-```bash
-pytest
-```
-
-## Linting
-
-Flake8 is used for linting the code. You can run the linter by executing the following command in the root directory of
-the project:
-
-```bash
-flake8 --show-source app tests
-```
-
-## Static Analysis
-
-Mypy is used for static type checking. You can run the static type checker by executing the following command in the
-root directory of the project:
-
-```bash
-mypy app tests
+📦 
+├─ .github
+│  └─ workflows      - Contains GitHub Actions workflow files.
+├─ app
+│  ├─ models         - Contains database entities.
+│  ├─ repositories   - Handles database interactions.
+│  ├─ routes         - Defines application routes.
+│  ├─ services       - Implements business logic.
+│  └─ utilities      - Contains HTTP status codes.
+└─ tests
+   ├─ repositories   - Unit tests for repository functions.
+   ├─ routes         - Unit tests for route handlers.
+   ├─ services       - Unit tests for service layer functions.
+   └─ utilities      - Utility functions for testing.
 ```
