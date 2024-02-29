@@ -1,4 +1,6 @@
-from flask import current_app, jsonify
+import logging
+
+from flask import jsonify, request
 from flask_jwt_extended import JWTManager
 from jwt import InvalidTokenError
 
@@ -29,7 +31,8 @@ def register_jwt_handlers(jwt: JWTManager) -> None:
         :returns: A tuple containing a JSON response and a status code.
         """
 
-        current_app.logger.warning(f'Invalid JWT provided: {error}')
+        requester_ip = request.remote_addr
+        logging.warning(f'{requester_ip} - Invalid JWT provided: {error}')
         return jsonify({'error': 'INVALID_TOKEN', }), StatusCodes.UNAUTHORIZED
 
     @jwt.expired_token_loader
@@ -46,7 +49,8 @@ def register_jwt_handlers(jwt: JWTManager) -> None:
         :returns: A tuple containing a JSON response and a status code.
         """
 
-        current_app.logger.warning('Expired JWT token')
+        requester_ip = request.remote_addr
+        logging.warning(f'{requester_ip} - Expired JWT token')
         return jsonify({'error': 'TOKEN_EXPIRED'}), StatusCodes.UNAUTHORIZED
 
     @jwt.unauthorized_loader
@@ -62,5 +66,6 @@ def register_jwt_handlers(jwt: JWTManager) -> None:
         :returns: A tuple containing a JSON response and a status code.
         """
 
-        current_app.logger.warning(f'Unauthorized request: {error}')
+        requester_ip = request.remote_addr
+        logging.warning(f'{requester_ip} - Unauthorized request: {error}')
         return jsonify({'error': 'UNAUTHORIZED'}), StatusCodes.UNAUTHORIZED
