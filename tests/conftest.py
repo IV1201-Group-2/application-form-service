@@ -1,15 +1,24 @@
+import os
+
 import pytest
+from testcontainers.postgres import PostgresContainer  # type: ignore
 
 from app.app import create_app, database
 
 
-@pytest.fixture(scope='module')
-def app_with_client():
+@pytest.fixture(scope='session')
+def postgres():
+    with PostgresContainer('postgres:latest') as postgres:
+        yield postgres
+
+
+@pytest.fixture(scope='function')
+def app_with_client(postgres):
+    os.environ['DATABASE_URL'] = postgres.get_connection_url()
     flask_app = create_app()
     flask_app.config.update({
         'TESTING': True,
         'JWT_SECRET_KEY': 'your-test-secret-key',
-        'SQLALCHEMY_DATABASE_URI': 'sqlite:///:memory:',
     })
 
     with flask_app.app_context():
