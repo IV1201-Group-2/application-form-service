@@ -12,7 +12,7 @@ This API is used by applicants to submit their application for a job. It is a mi
 - **Logging**: Flask-Logging + Root Logger
 - **Database Integration**: Flask-SQLAlchemy
 - **Database**: PostgreSQL
-- **Testing**: Pytest
+- **Testing**: Pytest + Testcontainers
 - **Code Coverage**: pytest-cov
 - **Linting**: flake8
 - **Dependency Management**: Pip
@@ -31,15 +31,14 @@ Ensure all commands are executed from the project root.
 2. **Install Dependencies**: Install all required dependencies.
     ```bash
     pip install -r requirements.txt
-    pip install -r requirements-dev.txt
     ```
 
-3. **Run Tests**: Execute all tests.
+3. **Run Tests**: Execute all tests (requires Docker to run locally).
     ```bash
     pytest
     ```
 
-4. **Code Coverage**: Generate code coverage report.
+4. **Code Coverage**: Generate code coverage report (requires Docker to run locally).
     ```bash
     pytest --cov=app
     ```
