@@ -26,15 +26,12 @@ jobs:
           path: |
             ~/.cache/pip
             .mypy_cache
-          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt', '**/requirements-dev.txt') }}
+          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
           restore-keys: |
             ${{ runner.os }}-pip-
 
       - name: Install dependencies
         run: pip install -r requirements.txt
-
-      - name: Install development dependencies
-        run: pip install -r requirements-dev.txt
 
       - name: Run PEP8 linting and generate report
         run: |
@@ -63,15 +60,12 @@ jobs:
           path: |
             ~/.cache/pip
             .mypy_cache
-          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt', '**/requirements-dev.txt') }}
+          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
           restore-keys: |
             ${{ runner.os }}-pip-
 
       - name: Install dependencies
         run: pip install -r requirements.txt
-
-      - name: Install development dependencies
-        run: pip install -r requirements-dev.txt
 
       - name: Run static analysis and generate report
         run: |
@@ -100,15 +94,12 @@ jobs:
           path: |
             ~/.cache/pip
             .mypy_cache
-          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt', '**/requirements-dev.txt') }}
+          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
           restore-keys: |
             ${{ runner.os }}-pip-
 
       - name: Install dependencies
         run: pip install -r requirements.txt
-
-      - name: Install development dependencies
-        run: pip install -r requirements-dev.txt
 
       - name: Run pytest with coverage
         run: |
