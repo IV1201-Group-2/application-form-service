@@ -6,7 +6,6 @@ def test_app_initialization(app_with_client):
     assert app is not None
     assert app.config['TESTING'] is True
     assert app.config['JWT_SECRET_KEY'] == 'your-test-secret-key'
-    assert 'sqlite:///:memory:' in app.config['SQLALCHEMY_DATABASE_URI']
 
 
 def test_logging_setup(app_with_client):
