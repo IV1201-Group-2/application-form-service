@@ -1,1 +1,1 @@
-web: gunicorn app.app:application --log-file -
+web: gunicorn 'app.app:create_app()' --log-file -
